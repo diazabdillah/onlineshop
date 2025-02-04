@@ -3,12 +3,7 @@
 
 
 <p align="center">Dibuat Menggunakan Framework Laravel Versi 9.</p>
-<div align="center">
 
-[![All Contributors](https://img.shields.io/github/contributors/fikrisuheri/laravel-toko-online-anime-store)](https://github.com/fikrisuheri/laravel-toko-online-anime-store/graphs/contributors)
-![GitHub last commit](https://img.shields.io/github/last-commit/fikrisuheri/laravel-toko-online-anime-store.svg)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/fikrisuheri/laravel-toko-online-anime-store)
-</div>
 
 <!-- ## DIMOHON UNTUK TIDAK DIPERJUALBELIKAN ! -->
 
