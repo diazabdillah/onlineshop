@@ -8,7 +8,7 @@
                     <div class="categories__item categories__large__item set-bg"
                         data-setbg="{{ asset('me') }}/img/goku.png">
                         <div class="categories__text">
-                            <p>Beragam Merchandise Anime Mulai Dari Tshirt, Hoddie, Action Figure Semuanya Tersedia Di Anime
+                            <p>Beragam Produk Mulai Dari Tshirt, Hoddie, Skincare dan Frozen Food Semuanya Tersedia Di Anekabarangsby
                                 Store.</p>
                             <a href="#">Jelajahi Sekarang</a>
                         </div>

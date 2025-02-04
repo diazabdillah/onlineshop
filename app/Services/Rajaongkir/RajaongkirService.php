@@ -9,8 +9,8 @@ class RajaongkirService
 
     public const BASE_URL = [
         'starter' => 'https://api.rajaongkir.com/starter',
-        'basic' => 'https://api.rajaongkir.com/basic',
-        'pro' => 'https://pro.rajaongkir.com/api',
+        // 'basic' => 'https://api.rajaongkir.com/basic',
+        // 'pro' => 'https://pro.rajaongkir.com/api',
     ];
 
     protected string $url;

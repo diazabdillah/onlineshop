@@ -9,7 +9,7 @@
          </a></li>
      </ul>
      <div class="offcanvas__logo">
-         <a href="{{ url('/') }}"><img src="{{ asset('ashion') }}/img/logo.png" alt=""></a>
+         <a href="{{ url('/') }}"><img src="{{ asset('ashion') }}/img/logo.png" alt="">Anekabarangsby</a>
      </div>
      <div id="mobile-menu-wrap"></div>
  </div>
