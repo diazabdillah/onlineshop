@@ -10,7 +10,7 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/fikrisuheri/laravel-toko-online-anime-store)
 </div>
 
-## DIMOHON UNTUK TIDAK DIPERJUALBELIKAN !
+<!-- ## DIMOHON UNTUK TIDAK DIPERJUALBELIKAN ! -->
 
 ## Fitur apa saja yang tersedia di Aplikasi Toko Online Laravel?
 
@@ -21,12 +21,12 @@
 - Dan lain-lain
 
 
-## Akun Default
+<!-- ## Akun Default
 
 - email: admin@gmail.com
 - Password: admin123
 
----
+--- -->
 
 ## Install
 
@@ -84,14 +84,14 @@ php artisan serve
 Contributions, issues and feature requests di persilahkan.
 
 
-## Author
+<!-- ## Author
 
 - Facebook : <a href="https://web.facebook.com/ahmad.ari.9847/"> FIKRI SUHERI</a>
 - INSTAGRAM : <a href="https://www.instagram.com/fikrisuheri__"> FIKRI SUHERI</a>
 
 ## Donation
 
-You can support Me On [Saweria](https://saweria.co/fikrisuheri) Or [Traktee](https://trakteer.id/fikri-suheri)
+You can support Me On [Saweria](https://saweria.co/fikrisuheri) Or [Traktee](https://trakteer.id/fikri-suheri) -->
 
 ## Preview
 
