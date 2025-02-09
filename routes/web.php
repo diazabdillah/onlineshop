@@ -30,7 +30,7 @@ use Spatie\Permission\Contracts\Role;
 |
 */
 
-Route::get('payments/midtrans-notification', [MidtransController::class, 'receive']);
+Route::post('payments/midtrans-notification', [MidtransController::class, 'receive']);
 Route::get('payments/midtrans-success', [MidtransController::class, 'success']);
 
 
