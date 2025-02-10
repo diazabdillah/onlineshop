@@ -9,7 +9,7 @@
          </a></li>
      </ul>
      <div class="offcanvas__logo">
-         <a href="{{ url('/') }}"><img src="{{ asset('ashion') }}/img/logo.png" alt="">Anekabarangsby</a>
+         <a href="{{ url('/') }}"><img src="{{ asset('ashion') }}/img/logo.jpg" alt=""></a>
      </div>
      <div id="mobile-menu-wrap"></div>
  </div>
@@ -21,7 +21,7 @@
          <div class="row">
              <div class="col-xl-3 col-lg-2">
                  <div class="">
-                     <h1 class="title-logo">{{ $app_name }}</h1>
+                     <h1 class="title-logo">Anekabarangsby</h1>
                  </div>
              </div>
              <div class="col-xl-6 col-lg-7 text-center">

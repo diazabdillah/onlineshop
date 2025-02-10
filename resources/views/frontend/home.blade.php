@@ -6,11 +6,15 @@
             <div class="row">
                 <div class="col-lg-6 p-0">
                     <div class="categories__item categories__large__item set-bg"
-                        data-setbg="{{ asset('me') }}/img/goku.png">
+                        data-setbg="{{ asset('me') }}/img/banner.jpg">
+                        {{-- <video width="320" height="240" controls>
+                            <source src="{{ asset('me') }}/img/banner.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video> --}}
                         <div class="categories__text">
-                            <p>Beragam Produk Mulai Dari Tshirt, Hoddie, Skincare dan Frozen Food Semuanya Tersedia Di Anekabarangsby
+                            <p>Beragam Produk Mulai Dari Tshirt, Hoddie, Skincare, Software Aplikasi dan Frozen Food Semuanya Tersedia Di Anekabarangsby
                                 Store.</p>
-                            <a href="#">Jelajahi Sekarang</a>
+                            <a href="/product">Jelajahi Sekarang</a>
                         </div>
                     </div>
                 </div>
@@ -23,7 +27,7 @@
                                     <div class="categories__text">
                                         <h4>{{ $category->name }}</h4>
                                         <p>{{ $category->Products()->count() }} item</p>
-                                        <a href="#">Jelajahi</a>
+                                        <a href="/category">Jelajahi</a>
                                     </div>
                                 </div>
                             </div>
