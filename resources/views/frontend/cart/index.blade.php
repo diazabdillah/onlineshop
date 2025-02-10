@@ -47,7 +47,15 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="cart__price">{{ $carts->Product->price_rupiah }}</td>
+                                        
+                                        <td class="cart__price">
+                                            @if($carts->Product->discounted_price)
+                                                <span style="text-decoration: line-through;">{{ $carts->Product->price }}</span>
+                                                <span>{{ $carts->Product->discounted_price }}</span>
+                                            @else
+                                                <span>{{ $carts->Product->price }}</span> <!-- Harga tanpa coret untuk produk tanpa diskon -->
+                                            @endif
+                                        </td>
                                         <input type="hidden" name="cart_id[]" value="{{ $carts->id }}">
                                         <td class="cart__quantity">
                                             <div class="pro-qty">

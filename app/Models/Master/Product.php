@@ -11,6 +11,9 @@ class Product extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    // protected $fillable = [
+    //     'name', 'price', 'discounted_price', 'discount_percentage', 'thumbnails', 'category_id', 'slug'
+    // ];
     protected $appends = ['thumbnails_path','price_rupiah','total_sold'];
 
     public function Category()
@@ -21,6 +24,13 @@ class Product extends Model
     public function OrderDetails()
     {
         return $this->hasMany(OrderDetail::class);
+    }
+    public function getDiscountPercentageAttribute()
+    {
+        if ($this->price > $this->discounted_price) { // Memastikan harga asli lebih besar dari 0
+            return $this->discounted_price ? round((($this->price - $this->discounted_price) / $this->price) * 100, 2) : 0;
+        }
+        return 0;
     }
 
     public function getThumbnailsPathAttribute()

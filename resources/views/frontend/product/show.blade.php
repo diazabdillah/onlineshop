@@ -41,7 +41,14 @@
                             <span>( 138 reviews )</span>
                         </div>
                         <form action="{{ route('cart.store') }}" method="POST">
-                        <div class="product__details__price">{{ $data['product']->price }} <span></div>
+                        <div class="product__details__price">
+                            @if ($data['product']->discounted_price)
+                                Rp {{ number_format($data['product']->discounted_price, 0, ',', '.') }}
+                                <span>Rp {{ number_format($data['product']->price, 0, ',', '.') }}</span>
+                            @else
+                                Rp {{ number_format($data['product']->price, 0, ',', '.') }}
+                            @endif
+                        </div>
                         @csrf
                         <div class="product__details__button">
                             <div class="quantity">
@@ -59,6 +66,10 @@
                                 <li>
                                     <span>Berat : </span>
                                     <p>{{ $data['product']->weight }} Gram</p>
+                                </li>
+                                <li>
+                                    <span>Stok : </span>
+                                    <p>{{ $data['product']->stok }} Unit</p> <!-- Menambahkan informasi stok -->
                                 </li>
                             </ul>
                         </div>
@@ -94,6 +105,8 @@
                     $product_related->slug]))
                     @slot('name', $product_related->name)
                     @slot('price', $product_related->price)
+                    @slot('discounted_price', $product_related->discounted_price ?? null) <!-- Harga diskon -->
+                    @slot('discount_percentage', $product_related->discount_percentage ?? null) <!-- Persentase diskon -->
                 @endcomponent
                 </div>
                @endforeach
