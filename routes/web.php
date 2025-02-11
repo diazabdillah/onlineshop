@@ -91,6 +91,7 @@ Route::prefix('app')->group(function () {
 });
 
 Route::middleware('auth','role:user')->group(function(){
+    Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
 
     Route::prefix('cart')->name('cart.')->group(function(){
         Route::get('/',[CartController::class,'index'])->name('index');

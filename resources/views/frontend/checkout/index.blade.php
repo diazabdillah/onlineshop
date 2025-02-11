@@ -78,6 +78,16 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="checkout__order__voucher">
+                               
+                                    <div class="checkout__form__input">
+                                    <p>Get Voucher <span>*</span></p>
+                    <input type="text" name="voucher" id="get_voucher_code" placeholder="Enter Voucher Code">
+                                  
+                                    </div>
+                          
+                                <div id="voucher-message"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -211,5 +221,39 @@
             $('#shipping_cost').val(ongkir);
             $('#total').text(rupiah(total))
         }
+
+        $(document).ready(function() {
+            // ... existing code ...
+            $('#get_voucher_code').on('input', function() {
+                var voucherCode = $(this).val();
+                console.log(voucherCode);
+                if (voucherCode) {
+                    $.ajax({
+                        url: "{{ route('apply.voucher') }}",
+                        method: "POST",
+                        data: {
+                            code: voucherCode,
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Tampilkan pesan sukses
+                                $('#get-voucher-message').html('<p style="color: green;">' + response.message + '</p>');
+                            } else {
+                                // Tampilkan pesan error
+                                $('#get-voucher-message').html('<p style="color: red;">' + response.message + '</p>');
+                            }
+                        },
+                        error: function(xhr) {
+                            // Tampilkan pesan error dari server
+                            let errorMessage = xhr.responseJSON.message || 'An error occurred.';
+                            $('#get-voucher-message').html('<p style="color: red;">' + errorMessage + '</p>');
+                        }
+                    });
+                } else {
+                    $('#get-voucher-message').empty(); // Kosongkan pesan jika input kosong
+                }
+            });
+        });
     </script>
 @endpush

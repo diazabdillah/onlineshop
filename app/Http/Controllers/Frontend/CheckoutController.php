@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Feature\Cart;
+use App\Models\Voucher;
 use App\Models\Setting\ShippingAddress;
 use App\Repositories\CrudRepositories;
 use App\Services\Feature\CartService;
@@ -40,4 +41,21 @@ class CheckoutController extends Controller
             dd($e);
         }
     }
+   
+    public function apply(Request $request)
+    {
+        // $request->validate([
+        //     'code' => 'required|exists:vouchers,code',
+        // ]);
+
+        $voucher = Voucher::where('code', $request->code)->first();
+
+        if ($voucher && $voucher->isValid()) { // Memastikan $voucher tidak null
+            // Apply voucher logic here
+            return redirect()->back()->with('success', 'Voucher applied successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Voucher is not valid.');
+    }
+ 
 }

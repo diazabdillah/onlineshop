@@ -3,6 +3,7 @@ namespace App\Services\Feature;
 
 use App\Models\Feature\Order;
 use App\Models\Feature\OrderDetail;
+use App\Models\Voucher;
 use App\Repositories\CrudRepositories;
 use Illuminate\Support\Str;
 
@@ -21,7 +22,17 @@ class CheckoutService{
     {
         $userCart = $this->cartService->getUserCart();
         $subtotal =  $userCart->sum('total_price_per_product');
-        $total_pay = $subtotal + $request['shipping_cost']; 
+        $discount = 0;
+
+        if ($request->has('code')) {
+            $voucher = Voucher::where('code', $request->voucher_code)->first();
+    
+            if ($voucher && $voucher->isValid()) {
+                $discount = $subtotal - $voucher->discount;
+                $voucher->increment('used_count');
+            }
+        }
+        $total_pay = $discount + $request['shipping_cost']; 
         $dataOrder = [
             'invoice_number' => strtoupper(Str::random('6')),
             'total_pay' => $total_pay,
