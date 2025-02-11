@@ -24,14 +24,22 @@ class CheckoutService{
         $subtotal =  $userCart->sum('total_price_per_product');
         $discount = 0;
 
-        if ($request->has('code')) {
-            $voucher = Voucher::where('code', $request->voucher_code)->first();
-    
-            if ($voucher && $voucher->isValid()) {
-                $discount = $subtotal - $voucher->discount;
+     
+        $voucher_code = $request['voucher_code']; // Ambil kode voucher dari permintaan
+        $voucher = Voucher::where('discount', $voucher_code)->first(); // Temukan voucher berdasarkan kode
+
+        if ($voucher) { // Periksa apakah voucher valid
+            if ($voucher->used_count < $voucher->usage_limit) { // Periksa apakah voucher masih dapat digunakan
+                $discount = $subtotal - $request['voucher_code'];
                 $voucher->increment('used_count');
+            } else {
+                // Tambahkan logika untuk menangani voucher yang sudah tidak dapat digunakan
+                $discount = $subtotal; // Jika voucher sudah digunakan maksimal, tidak ada diskon
             }
+        } else {
+            $discount = $subtotal; // Jika voucher tidak valid, tidak ada diskon
         }
+
         $total_pay = $discount + $request['shipping_cost']; 
         $dataOrder = [
             'invoice_number' => strtoupper(Str::random('6')),
@@ -41,6 +49,7 @@ class CheckoutService{
             'address_detail' => $request['address_detail'],
             'courier' => $request['courier'],
             'subtotal' => $subtotal,
+            'voucher' => $request['voucher_code'],
             'shipping_cost' => $request['shipping_cost'],
             'shipping_method' => $request['shipping_method'],
             'total_weight' => $request['total_weight'],

@@ -47,15 +47,16 @@ class CheckoutController extends Controller
         // $request->validate([
         //     'code' => 'required|exists:vouchers,code',
         // ]);
-
         $voucher = Voucher::where('code', $request->code)->first();
 
         if ($voucher && $voucher->isValid()) { // Memastikan $voucher tidak null
             // Apply voucher logic here
-            return redirect()->back()->with('success', 'Voucher applied successfully.');
+            return response()->json([
+                'success' => 'Voucher applied successfully.',
+                'data' => $voucher // Menyertakan data voucher yang diterapkan
+            ]);
         }
 
-        return redirect()->back()->with('error', 'Voucher is not valid.');
+        return response()->json(['error' => 'Voucher is not valid.']);
     }
- 
 }
