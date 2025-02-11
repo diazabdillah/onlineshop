@@ -78,15 +78,17 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="checkout__order__voucher">
                                
                                     <div class="checkout__form__input">
-                                    <p>Get Voucher <span>*</span></p>
-                    <input type="text" name="voucher" id="get_voucher_code" placeholder="Enter Voucher Code">
+                                    <p>Kode Voucher</p>
+                                    <input type="text" name="voucher" id="get_voucher_code" placeholder="Enter Voucher Code">
                                   
                                     </div>
                           
                                 <div id="voucher-message"></div>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -115,9 +117,11 @@
                                 <ul>
                                     <li>Subtotal <span>{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span>
                                     </li>
+                                    <li>Voucher <span id="voucher">Rp 0</span></li>
                                     <li>Shipping Cost <span id="text-cost">Rp 0</span></li>
                                     <li>Total <span id="total">{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
                                     <input type="hidden" name="shipping_cost" id="shipping_cost" >
+                                    <input type="hidden" name="voucher_code" id="voucher_code" value="0">
                                 </ul>
                             </div>
                             <button type="submit" class="site-btn">Place oder</button>
@@ -216,10 +220,11 @@
         function countCost(ongkir)
         {
             var subtotal = `{{ $data['carts']->sum('total_price_per_product') }}`;
-            var total = parseInt(subtotal) + ongkir;
+            var discount = parseInt($('#voucher').text().replace(/[^0-9]/g, '')) || 0; // Ambil nilai diskon dari voucher
+            var total = parseInt(subtotal) + ongkir - discount; // Kurangi total dengan diskon
             $('#text-cost').text(rupiah(ongkir));
             $('#shipping_cost').val(ongkir);
-            $('#total').text(rupiah(total))
+            $('#total').text(rupiah(total));
         }
 
         $(document).ready(function() {
@@ -237,21 +242,25 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                // Tampilkan pesan sukses
-                                $('#get-voucher-message').html('<p style="color: green;">' + response.message + '</p>');
+                                console.log(response.data.discount);
+                                $('#voucher_code').val(response.data.discount);
+                                $('#voucher').text('-' + rupiah(response.data.discount));
+                                countCost(parseInt($('#shipping_cost').val())); // Panggil countCost untuk memperbarui total
                             } else {
-                                // Tampilkan pesan error
-                                $('#get-voucher-message').html('<p style="color: red;">' + response.message + '</p>');
+                                $('#voucher_code').val(0);
+                                $('#voucher').text(rupiah(0));
+                                $('#voucher-message').html('<p style="color: red;">' + response.data.discount + '</p>');
                             }
                         },
                         error: function(xhr) {
-                            // Tampilkan pesan error dari server
                             let errorMessage = xhr.responseJSON.message || 'An error occurred.';
-                            $('#get-voucher-message').html('<p style="color: red;">' + errorMessage + '</p>');
+                            $('#voucher-message').html('<p style="color: red;">' + errorMessage + '</p>');
                         }
                     });
                 } else {
-                    $('#get-voucher-message').empty(); // Kosongkan pesan jika input kosong
+                    $('#voucher-message').html('<p style="color: red;">Voucher code cannot be empty.</p>'); // Menampilkan pesan jika input kosong
+                    $('#voucher').text(rupiah(0));
+                    $('#voucher_code').val(0);
                 }
             });
         });

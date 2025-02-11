@@ -119,6 +119,11 @@
                                                 </div>
                                             </div>
                                             <div class="invoice-detail-item">
+                                                <div class="invoice-detail-name">Voucher</div>
+                                                <div class="invoice-detail-value">- {{ rupiah($data['order']->voucher) }}
+                                                </div>
+                                            </div>
+                                            <div class="invoice-detail-item">
                                                 <div class="invoice-detail-name">{{ __('text.shipping_cost') }}</div>
                                                 <div class="invoice-detail-value">
                                                     {{ rupiah($data['order']->shipping_cost) }}</div>
