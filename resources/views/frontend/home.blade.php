@@ -11,8 +11,8 @@
                             <source src="{{ asset('me') }}/img/banner.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video> --}}
-                        <div class="categories__text">
-                            <p>Beragam Produk Mulai Dari Tshirt, Hoddie, Skincare, Software Aplikasi dan Frozen Food Semuanya Tersedia Di Anekabarangsby
+                        <div class="categories__text">s
+                            <p style="color:white;">Beragam Produk Mulai Dari Tshirt, Hoddie, Skincare, Software Aplikasi dan Frozen Food Semuanya Tersedia Di Anekabarangsby
                                 Store.</p>
                             <a href="/product">Jelajahi Sekarang</a>
                         </div>
@@ -27,7 +27,7 @@
                                     <div class="categories__text">
                                         <h4>{{ $category->name }}</h4>
                                         <p>{{ $category->Products()->count() }} item</p>
-                                        <a href="/category">Jelajahi</a>
+                                        <a href="{{ route('category.show',$category->slug) }}">Jelajahi</a>
                                     </div>
                                 </div>
                             </div>

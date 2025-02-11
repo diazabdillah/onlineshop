@@ -126,6 +126,7 @@ Route::prefix('rajaongkir')->name('rajaongkir.')->group(function(){
 
 
 Route::get('/', [HomeController::class,'index'])->name('home');
+Route::get('/contact', [HomeController::class,'contact'])->name('contact');
 // Route Product
 Route::get('/product', [FrontendProductController::class,'index'])->name('product.index');
 
