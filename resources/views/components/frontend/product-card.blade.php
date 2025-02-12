@@ -33,6 +33,14 @@
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
         </div>
+        <div class="product__stock">
+        <i class="fa fa-cubes"></i> <!-- Ikon stok -->
+        <span>{{ $stok }} Unit</span> <!-- Jumlah stok -->
+        <span style="margin-left: 10px;"> <!-- Menambahkan jarak -->
+            <i class="fa fa-shopping-cart"></i> <!-- Ikon penjualan -->
+            {{ $penjualan }} Terjual
+        </span> <!-- Angka penjualan -->
+    </div>
         <div class="product__price">
             @if(isset($discounted_price) && $discounted_price > 0) <!-- Jika ada diskon -->
                 <span class="harga" style="text-decoration: line-through; color: #999; margin-right: 10px;">
@@ -45,5 +53,6 @@
                 <span>Rp {{ number_format($price, 0, ',', '.') }}</span>
             @endif
         </div>
+       
     </div>
 </div>
