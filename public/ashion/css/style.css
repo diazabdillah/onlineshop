@@ -1192,24 +1192,23 @@ ol {
 	top: 10px;
 }
 /* Badge Diskon */
-.discount-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: red;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: bold;
-    z-index: 1;
+.product__item {
+    border: 1px solid #e0e0e0; /* Garis kotak dengan warna abu-abu muda */
+    border-radius: 8px; /* Sudut yang sedikit melengkung */
+    overflow: hidden; /* Memastikan konten di dalam card tidak melampaui border */
+    transition: box-shadow 0.3s ease; /* Efek bayangan saat hover */
 }
+
+.product__item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan saat hover */
+}
+
 .discount-badge {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #ff0000;
-    color: #fff;
+    background-color: #fbff00;
+    color: #000000;
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 12px;
@@ -1228,7 +1227,18 @@ ol {
     font-weight: bold;
     z-index: 1;
 }
-
+.label.out-of-stock {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgb(255, 0, 0);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1;
+}
 /* Tombol Hover */
 .product__hover {
     position: absolute;

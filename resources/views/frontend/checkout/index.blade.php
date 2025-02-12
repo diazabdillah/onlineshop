@@ -32,8 +32,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="checkout__form__input">
                                     <p>Phone Number <span>*</span></p>
-                                    <input type="text" name="phone_number"  required>
-                                </div>
+                                    <input type="text" value="{{ $data['profile']->phone }}" name="phone_number" required>                                </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="checkout__form__input">
@@ -58,7 +57,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="checkout__form__input">
                                     <p>Address Detail <span>*</span></p>
-                                    <input type="text" name="address_detail" required>
+                                    <input type="text" value="{{$data['profile']->address}}" name="address_detail" required>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">

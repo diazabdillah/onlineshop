@@ -31,7 +31,9 @@
                                     @slot('discounted_price', $product_related->discounted_price ?? null) <!-- Harga diskon -->
                                     @slot('discount_percentage', $product_related->discount_percentage ?? null)
                                     @slot('stok', $product_related->stok ?? null)
-                                    @slot('penjualan', $product_related->penjualan ?? null) <!-- Persentase diskon -->
+                                    @slot('penjualan', $product_related->penjualan ?? null)
+                                    @slot('chart', route('product.show', ['categoriSlug' => $product_related->Category->slug, 'productSlug' => $product_related->slug]))
+                                    <!-- @slot('checkout', route('product.show', ['categoriSlug' => $product_related->Category->slug, 'productSlug' => $product_related->slug])) Persentase diskon -->
                                 @endcomponent
                             </div>
                         @endforeach

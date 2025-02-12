@@ -9,6 +9,7 @@ use App\Models\Setting\ShippingAddress;
 use App\Repositories\CrudRepositories;
 use App\Services\Feature\CartService;
 use App\Services\Feature\CheckoutService;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Rajaongkir\RajaongkirService;
 use Exception;
 use Illuminate\Http\Request;
@@ -26,6 +27,11 @@ class CheckoutController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
+        $data['profile'] = $user->profile()
+        ->join('users', 'profile.user_id', '=', 'users.id') // Melakukan join dengan tabel users
+        ->select('profile.*', 'users.name', 'users.email') // Memilih kolom yang diinginkan
+        ->first();
         $data['carts'] = $this->cartService->getUserCart();
         $data['provinces'] = $this->rajaongkirService->getProvince();
         $data['shipping_address'] = ShippingAddress::first();
