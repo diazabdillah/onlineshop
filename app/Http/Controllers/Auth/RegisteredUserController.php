@@ -22,7 +22,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -32,7 +32,10 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
+        $user->profile()->create([
+            'user_id' => $user->id,
+            // ... tambahkan kolom lain yang diperlukan untuk profil di sini ...
+        ]);
         $user->assignRole('user');
 
         event(new Registered($user));

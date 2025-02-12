@@ -1,78 +1,100 @@
 @extends('layouts.frontend.app')
 @section('content')
-<section class="ftco-section">
-<div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-        <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">Edogaru</span><span class="text-black-50">edogaru@mail.com.my</span><span> </span></div>
-        </div>
-        <div class="col-md-5 border-right">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Profile Settings</h4>
+    <section class="ftco-section">
+        <div class="container rounded bg-white mt-5 mb-5">
+            <div class="row">
+                <div class="col-md-2 border-right">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
+                            width="150px"
+                            src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span
+                            class="font-weight-bold">{{ $profile->name }}</span><span
+                            class="text-black-50">{{ $profile->email }}</span><span> </span></div>
                 </div>
-                <!-- <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value=""></div>
-                    <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="" placeholder="surname"></div>
+                <div class="col-md-5 border-right">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Profile Setting</h4>
+                        </div>
+                       
+                        <form action="{{ route('account.profiles.update') }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div>
+                                <label class="labels" for="first_name">Nama Depan:</label>
+                                <input class="form-control" type="text" name="first_name" id="first_name"
+                                    value="{{ $profile->first_name }}" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="last_name">Nama Belakang:</label>
+                                <input class="form-control" type="text" name="last_name" id="last_name"
+                                    value="{{ $profile->last_name }}" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="province">Provinsi:</label>
+                                <input class="form-control" type="text" name="province" id="province"
+                                    value="{{ $profile->province }}" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="city">Kota:</label>
+                                <input class="form-control" type="text" name="city" id="city"
+                                    value="{{ $profile->city }}" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="phone">Telepon:</label>
+                                <input class="form-control" type="text" name="phone" id="phone"
+                                    value="{{ $profile->phone }}" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="address">Alamat:</label>
+                                <textarea class="form-control" name="address" id="address" rows="5" style="height: 150px;" required>{{ $profile->address }}</textarea>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary profile-button mt-2" type="submit">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value=""></div>
-                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="enter address line 1" value=""></div>
-                    <div class="col-md-12"><label class="labels">Address Line 2</label><input type="text" class="form-control" placeholder="enter address line 2" value=""></div>
-                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" class="form-control" placeholder="enter address line 2" value=""></div>
-                    <div class="col-md-12"><label class="labels">State</label><input type="text" class="form-control" placeholder="enter address line 2" value=""></div>
-                    <div class="col-md-12"><label class="labels">Area</label><input type="text" class="form-control" placeholder="enter address line 2" value=""></div>
-                    <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value=""></div>
-                    <div class="col-md-12"><label class="labels">Education</label><input type="text" class="form-control" placeholder="education" value=""></div>
+                <div class="col-md-5 border-right">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Account Setting</h4>
+                        </div>
+                       
+                        <form action="{{ route('account.profiles.updateaccount') }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div>
+                                <label class="labels" for="name">Name:</label>
+                                <input class="form-control" type="text" name="name" id="name"
+                                    value="{{ $profile->name }}" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="email">Email:</label>
+                                <input class="form-control" type="email" name="email" id="email"
+                                    value="{{ $profile->email }}" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="old_password">Password Lama:</label>
+                                <input class="form-control" type="password" name="old_password" id="old_password" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="new_password">Password Baru:</label>
+                                <input class="form-control" type="password" name="password" id="new_password" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="password_confirmation">Konfirmasi Password Baru:</label>
+                                <input class="form-control" type="password" name="password_confirmation" id="password_confirmation" required>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary profile-button mt-2" type="submit">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
-                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
-                </div>
-                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
-                <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
-                <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
-            </div>
-        </div> -->
-        <form action="{{ route('profiles.store') }}" method="POST">
-        @csrf
-        <div>
-            <label for="first_name">Nama Depan:</label>
-            <input type="text" name="first_name" id="first_name" required>
         </div>
-        <div>
-            <label for="last_name">Nama Belakang:</label>
-            <input type="text" name="last_name" id="last_name" required>
         </div>
-        <div>
-            <label for="province">Provinsi:</label>
-            <input type="text" name="province" id="province" required>
-        </div>
-        <div>
-            <label for="city">Kota:</label>
-            <input type="text" name="city" id="city" required>
-        </div>
-        <div>
-            <label for="phone">Telepon:</label>
-            <input type="text" name="phone" id="phone" required>
-        </div>
-        <div>
-            <label for="address">Alamat:</label>
-            <textarea name="address" id="address" required></textarea>
-        </div>
-        <div>
-            <button type="submit">Submit</button>
-        </div>
-    </form>
-    </div>
-</div>
-</div>
-</div>
-	</section>
-        <!-- Product Section End -->
-    @endsection
+    </section>
+    <!-- Product Section End -->
+@endsection

@@ -114,7 +114,8 @@ Route::middleware('auth','role:user')->group(function(){
 
     Route::prefix('account')->name('account.')->group(function(){
         Route::get('/',[AccountController::class,'index'])->name('index');
-        Route::post('/profiles', [ProfileController::class, 'store'])->name('profiles.store');
+        Route::put('/profiles', [AccountController::class, 'update'])->name('profiles.update');
+        Route::put('/profiles/account', [AccountController::class, 'updateaccount'])->name('profiles.updateaccount');
     });
 
 
