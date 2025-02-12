@@ -1,4 +1,5 @@
 <div class="product__item">
+    
     <div class="product__item__pic set-bg" data-setbg="{{ $image }}">
         <!-- Label "New" -->
     
@@ -31,7 +32,7 @@
     </div>
 
     <!-- Informasi Produk -->
-    <div class="product__item__text">
+    <div class="product__item__text mt-2 mb-4">
         <h6>{{ $name }}</h6>
         <div class="product__price">
             @if(isset($discounted_price) && $discounted_price > 0) <!-- Jika ada diskon -->
@@ -60,13 +61,13 @@
             {{ $penjualan }} Terjual
         </span> <!-- Angka penjualan -->
     </div>
-        <div class="product__actions">
+        <!-- <div class="product__actions">
             <a class="btn btn-warning mb-4 mt-2" href="{{ $route }}" @if($stok <= 0) style="pointer-events: none; opacity: 0.5;" @endif>
                 <i class="fa fa-shopping-cart"></i> Add to Cart
             </a>
             <a class="btn btn-success mb-4 mt-2" href="{{ $route }}" @if($stok <= 0) style="pointer-events: none; opacity: 0.5;" @endif>
-                <i class="fa fa-plus"></i> Buy Now <!-- Mengganti ikon dari fa-check menjadi fa-plus -->
+                <i class="fa fa-plus"></i> Buy Now
             </a>
-</div>
+</div> -->
     </div>
 </div>
