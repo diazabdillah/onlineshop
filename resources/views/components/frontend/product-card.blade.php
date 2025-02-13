@@ -12,7 +12,7 @@
         <!-- Badge Habis -->
         @if($stok <= 0) <!-- Jika stok nol -->
             <div class="label out-of-stock">Habis</div>
-        @else if($stok > 0)
+        @elseif($stok > 0)
         <div class="label new">New</div>
         @endif
 
@@ -54,12 +54,12 @@
             <i class="fa fa-star"></i>
         </div>
         <div class="product__stock">
-        <i class="fa fa-cubes"></i> <!-- Ikon stok -->
-        <span>{{ $stok }} Unit</span> <!-- Jumlah stok -->
-        <span style="margin-left: 10px;"> <!-- Menambahkan jarak -->
-            <i class="fa fa-shopping-cart"></i> <!-- Ikon penjualan -->
-            {{ $penjualan }} Terjual
-        </span> <!-- Angka penjualan -->
+        <i class="fa fa-cubes"></i>
+        <span>{{ $stok ? $stok : '0' }} Unit</span> 
+        <span style="margin-left: 10px;"> 
+            <i class="fa fa-shopping-cart"></i> 
+            {{ $penjualan ? $penjualan : '0' }} Terjual
+        </span>
     </div>
         <!-- <div class="product__actions">
             <a class="btn btn-warning mb-4 mt-2" href="{{ $route }}" @if($stok <= 0) style="pointer-events: none; opacity: 0.5;" @endif>
