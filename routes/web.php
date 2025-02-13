@@ -118,7 +118,10 @@ Route::middleware('auth','role:user')->group(function(){
         Route::put('/profiles/account', [AccountController::class, 'updateaccount'])->name('profiles.updateaccount');
     });
 
+    Route::get('/products/{productId}/reviews', [ReviewController::class, 'showReviews'])->name('products.reviews');
 
+    // Route untuk menyimpan review (POST)
+    Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 });
 
 Route::prefix('rajaongkir')->name('rajaongkir.')->group(function(){

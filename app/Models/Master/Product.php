@@ -50,4 +50,8 @@ class Product extends Model
             $q->whereIn('status',[2,3]);
         })->sum('qty');
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

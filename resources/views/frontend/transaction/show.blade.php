@@ -76,6 +76,7 @@
                                                     <th class="text-center">{{ __('field.price') }}</th>
                                                     <th class="text-center">{{ __('text.quantity') }}</th>
                                                     <th class="text-right">Total</th>
+                                                    <th  class="text-right">Action</th>
                                                 </tr>
                                                 @foreach ($data['order']->orderDetail()->get() as $detail)
                                                     <tr>
@@ -88,10 +89,63 @@
                                                         <td class="text-center">{{ $detail->qty }}</td>
                                                         <td class="text-right">
                                                             {{ rupiah($detail->total_price_per_product) }}</td>
+                                                            <td class="text-right">   <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                                Riview Product
+                                            </button></td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
+                                     
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Riview Product</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                    <form action="{{ route('reviews.store', $data['order']) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <div class="rating-css">
+    <div class="star-icon">
+        <input type="radio" value="1" name="product_rating" checked id="rating1">
+        <label for="rating1" class="fa fa-star"></label>
+        <input type="radio" value="2" name="product_rating" id="rating2">
+        <label for="rating2" class="fa fa-star"></label>
+        <input type="radio" value="3" name="product_rating" id="rating3">
+        <label for="rating3" class="fa fa-star"></label>
+        <input type="radio" value="4" name="product_rating" id="rating4">
+        <label for="rating4" class="fa fa-star"></label>
+        <input type="radio" value="5" name="product_rating" id="rating5">
+        <label for="rating5" class="fa fa-star"></label>
+    </div>
+</div>
+<label for="">Ulasan</label> <br>
+    <textarea name="review" rows="4" required></textarea><br>
+    
+    <!-- <input type="number" name="rating" min="1" max="5" required> -->
+    
+    <!-- Input untuk gambar -->
+    <label for="image">Upload Gambar (opsional):</label>
+    <input type="file" name="image" id="image" accept="image/*"> <br>
+    
+    <!-- Input untuk video -->
+    <label for="video">Upload Video (opsional):</label> <br>
+    <input type="file" name="video" id="video" accept="video/*"><br>
+    
+    <!-- <button type="submit">Submit Review</button> -->
+</form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                        <button type="button" class="btn btn-primary">Simpan</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="col-lg-8">
