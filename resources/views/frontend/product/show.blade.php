@@ -38,7 +38,7 @@
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
-                            <span>( 138 reviews )</span>
+                            <span>( 1 reviews )</span>
                         </div>
                         <form action="{{ route('cart.store') }}" method="POST">
                         <div class="product__details__price">
@@ -106,7 +106,9 @@
                     @slot('name', $product_related->name)
                     @slot('price', $product_related->price)
                     @slot('discounted_price', $product_related->discounted_price ?? null) <!-- Harga diskon -->
-                    @slot('discount_percentage', $product_related->discount_percentage ?? null) <!-- Persentase diskon -->
+                    @slot('discount_percentage', $product_related->discount_percentage ?? null)
+                    @slot('stok', $product_related->stok ?? null) 
+                    @slot('penjualan', $product_related->penjualan ?? null)<!-- Persentase diskon -->
                 @endcomponent
                 </div>
                @endforeach

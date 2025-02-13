@@ -30,6 +30,10 @@
                                 $product->slug]))
                                 @slot('name', $product->name)
                                 @slot('price', $product->price)
+                                @slot('discounted_price', $product->discounted_price ?? null) <!-- Harga diskon -->
+                                @slot('discount_percentage', $product->discount_percentage ?? null)
+                                @slot('stok', $product->stok ?? null)
+                                @slot('penjualan', $product->penjualan ?? null)
                             @endcomponent
                         </div>
                         @endforeach
