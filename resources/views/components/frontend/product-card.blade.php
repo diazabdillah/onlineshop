@@ -10,11 +10,11 @@
         @endif
 
         <!-- Badge Habis -->
-        @if($stok <= 0) <!-- Jika stok nol -->
-            <div class="label out-of-stock">Habis</div>
-        @elseif($stok > 0)
-        <div class="label new">New</div>
-        @endif
+        @if(isset($stok) && $stok <= 0) <!-- Jika stok nol -->
+        <div class="label out-of-stock">Habis</div>
+    @elseif(isset($stok) && $stok > 0)
+    <div class="label new">New</div>
+    @endif
 
         <!-- Tombol Hover -->
         <ul class="product__hover">
@@ -52,6 +52,7 @@
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
+            <span>( 1 reviews )</span>
         </div>
         <div class="product__stock">
         <i class="fa fa-cubes"></i>
