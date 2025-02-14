@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Review;
-use App\Models\Product;
+use App\Models\Master\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +28,8 @@ class ReviewController extends Controller
         $request->validate([
             'review' => 'required|string',
             'rating' => 'required|integer|min:1|max:5',
+            'rating_pelayanan' => 'required|integer|min:1|max:5',
+            'rating_pengiriman' => 'required|integer|min:1|max:5',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi untuk gambar
             'video' => 'nullable|mimes:mp4,mov,avi|max:10240', // Validasi untuk video
         ]);
@@ -50,6 +52,8 @@ class ReviewController extends Controller
         $review->user_id = Auth::id();
         $review->review = $request->review;
         $review->rating = $request->rating;
+        $review->rating_pelayanan = $request->rating_pelayanan;
+        $review->rating_pengiriman = $request->rating_pengiriman;
         $review->image = $imagePath;
         $review->video = $videoPath;
         $review->save();

@@ -4,6 +4,7 @@ namespace App\Models\Master;
 
 use App\Models\Feature\Order;
 use App\Models\Feature\OrderDetail;
+use App\Models\Review;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

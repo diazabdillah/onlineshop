@@ -8,25 +8,30 @@ use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Services\Rajaongkir\RajaongkirService;
 use Illuminate\Validation\Rules;
 class AccountController extends Controller
 {
-    protected $province;
 
-    public function __construct()
+    protected $province,$rajaongkirService;
+    public function __construct(RajaongkirService $rajaongkirService)
     {
-       
+
+        $this->rajaongkirService = $rajaongkirService;
+      
     }
+
 
     public function index()
     {
+        $data['provinces'] = $this->rajaongkirService->getProvince();
       $user = Auth::user();
       $profile = $user->profile()
       ->join('users', 'profile.user_id', '=', 'users.id') // Melakukan join dengan tabel users
       ->select('profile.*', 'users.name', 'users.email') // Memilih kolom yang diinginkan
       ->first(); // Ambil data profile dengan join ke users // Ambil data profile dengan join ke users // Ambil data profile dengan join ke users
    
-        return view('frontend.account', compact('profile'));
+        return view('frontend.account', compact('profile','data'));
     }
     public function update(Request $request)
     {

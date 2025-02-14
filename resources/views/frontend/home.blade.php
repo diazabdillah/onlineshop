@@ -11,7 +11,7 @@
                             <source src="{{ asset('me') }}/img/banner.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video> --}}
-                        <div class="categories__text">s
+                        <div class="categories__text">
                             <p style="color:white;">Beragam Produk Mulai Dari Tshirt, Hoddie, Skincare, Software Aplikasi dan Frozen Food Semuanya Tersedia Di Anekabarangsby
                                 Store.</p>
                             <a href="/product">Jelajahi Sekarang</a>

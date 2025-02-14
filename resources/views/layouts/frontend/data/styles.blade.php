@@ -59,6 +59,12 @@ rel="stylesheet">
 
     transition: 0.3s ease;
   }
+  .checked{
+    color: #ffe400;
+  }
+  .gray {
+    color: gray; /* Atur warna sesuai kebutuhan */
+}
 .profile-button:hover {
     background: #682773
 }

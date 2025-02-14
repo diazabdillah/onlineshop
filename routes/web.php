@@ -14,6 +14,7 @@ use App\Http\Controllers\Frontend\ProductController as FrontendProductController
 use App\Http\Controllers\Frontend\TransacationController;
 use App\Http\Controllers\Midtrans\MidtransController;
 use App\Http\Controllers\Rajaongkir\RajaongkirController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Setting\WebconfigController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;

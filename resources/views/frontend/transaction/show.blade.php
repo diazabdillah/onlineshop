@@ -106,43 +106,96 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
+                                                    <form action="{{ route('reviews.store', $detail->product->id) }}" method="POST" enctype="multipart/form-data">
+                                                        @csrf
                                                     <div class="modal-body">
-                                                    <form action="{{ route('reviews.store', $data['order']) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <div class="rating-css">
-    <div class="star-icon">
-        <input type="radio" value="1" name="product_rating" checked id="rating1">
-        <label for="rating1" class="fa fa-star"></label>
-        <input type="radio" value="2" name="product_rating" id="rating2">
-        <label for="rating2" class="fa fa-star"></label>
-        <input type="radio" value="3" name="product_rating" id="rating3">
-        <label for="rating3" class="fa fa-star"></label>
-        <input type="radio" value="4" name="product_rating" id="rating4">
-        <label for="rating4" class="fa fa-star"></label>
-        <input type="radio" value="5" name="product_rating" id="rating5">
-        <label for="rating5" class="fa fa-star"></label>
-    </div>
-</div>
-<label for="">Ulasan</label> <br>
-    <textarea name="review" rows="4" required></textarea><br>
-    
-    <!-- <input type="number" name="rating" min="1" max="5" required> -->
-    
-    <!-- Input untuk gambar -->
-    <label for="image">Upload Gambar (opsional):</label>
-    <input type="file" name="image" id="image" accept="image/*"> <br>
-    
-    <!-- Input untuk video -->
-    <label for="video">Upload Video (opsional):</label> <br>
-    <input type="file" name="video" id="video" accept="video/*"><br>
-    
-    <!-- <button type="submit">Submit Review</button> -->
-</form>
+                                                        
+                                                            <!-- Nama Produk -->
+                                                            <div class="product-info d-flex align-items-center">
+                                                                <img src="{{ asset('storage/' . $detail->product->thumbnails ) }}" alt="{{ $detail->product->thumbnails }}" width="50" height="50" style="border-radius: 50%;">
+                                                                <h6 class="mr-3">{{ $detail->product->name }}</h6>
+                                                            </div>
+                                                        
+                                                            <!-- Rating Kualitas Produk -->
+                                                            <div class="rating-css">
+                                                                <label for="product_rating">Kualitas Produk</label> <br>
+                                                                <div class="star-icon">
+                                                                    <input type="radio" value="1" name="rating" checked id="rating1">
+                                                                    <label for="rating1" class="fa fa-star"></label>
+                                                                    <input type="radio" value="2" name="rating" id="rating2">
+                                                                    <label for="rating2" class="fa fa-star"></label>
+                                                                    <input type="radio" value="3" name="rating" id="rating3">
+                                                                    <label for="rating3" class="fa fa-star"></label>
+                                                                    <input type="radio" value="4" name="rating" id="rating4">
+                                                                    <label for="rating4" class="fa fa-star"></label>
+                                                                    <input type="radio" value="5" name="rating" id="rating5">
+                                                                    <label for="rating5" class="fa fa-star"></label>
+                                                                </div>
+                                                            </div>
+                                                        
+                                                            <!-- Rating Pelayanan Penjual -->
+                                                            <div class="rating-css">
+                                                                <label for="seller_rating">Pelayanan Penjual</label> <br>
+                                                                <div class="star-icon">
+                                                                    <input type="radio" value="1" name="rating_pelayanan" checked id="seller_rating1">
+                                                                    <label for="seller_rating1" class="fa fa-star"></label>
+                                                                    <input type="radio" value="2" name="rating_pelayanan" id="seller_rating2">
+                                                                    <label for="seller_rating2" class="fa fa-star"></label>
+                                                                    <input type="radio" value="3" name="rating_pelayanan" id="seller_rating3">
+                                                                    <label for="seller_rating3" class="fa fa-star"></label>
+                                                                    <input type="radio" value="4" name="rating_pelayanan" id="seller_rating4">
+                                                                    <label for="seller_rating4" class="fa fa-star"></label>
+                                                                    <input type="radio" value="5" name="rating_pelayanan" id="seller_rating5">
+                                                                    <label for="seller_rating5" class="fa fa-star"></label>
+                                                                </div>
+                                                            </div>
+                                                        
+                                                            <!-- Rating Kecepatan Pengiriman -->
+                                                            <div class="rating-css">
+                                                                <label for="delivery_rating">Kecepatan Pengiriman</label> <br>
+                                                                <div class="star-icon">
+                                                                    <input type="radio" value="1" name="rating_pengiriman" checked id="delivery_rating1">
+                                                                    <label for="delivery_rating1" class="fa fa-star"></label>
+                                                                    <input type="radio" value="2" name="rating_pengiriman" id="delivery_rating2">
+                                                                    <label for="delivery_rating2" class="fa fa-star"></label>
+                                                                    <input type="radio" value="3" name="rating_pengiriman" id="delivery_rating3">
+                                                                    <label for="delivery_rating3" class="fa fa-star"></label>
+                                                                    <input type="radio" value="4" name="rating_pengiriman" id="delivery_rating4">
+                                                                    <label for="delivery_rating4" class="fa fa-star"></label>
+                                                                    <input type="radio" value="5" name="rating_pengiriman" id="delivery_rating5">
+                                                                    <label for="delivery_rating5" class="fa fa-star"></label>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                          <!-- Ulasan -->
+                                                          <div class="form-group">
+                                                            <label for="review">Ulasan</label>
+                                                            <textarea name="review" rows="4" cols="5" class="form-control" required></textarea>
+                                                        </div>
+                                                     
+                                                        <!-- Upload Gambar -->
+                                                        <div class="form-group">
+                                                            <label for="image">Upload Gambar (opsional):</label>
+                                                            <input type="file" name="image" id="image" class="form-control-file" accept="image/*">
+                                                        </div>
+                                                     
+                                                        <!-- Upload Video -->
+                                                        <div class="form-group">
+                                                            <label for="video">Upload Video (opsional):</label>
+                                                            <input type="file" name="video" id="video" class="form-control-file" accept="video/*">
+                                                        </div>
+                                                     
+                                                            {{-- <!-- Tombol Submit -->
+                                                            <div class="submit-button">
+                                                                <button type="submit">Submit Review</button>
+                                                            </div> --}}
+                                                      
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                        <button type="button" class="btn btn-primary">Simpan</button>
+                                                        <button type="submit" class="btn btn-primary">Simpan</button>
                                                     </div>
+                                                </form>
                                                 </div>
                                             </div>
                                         </div>

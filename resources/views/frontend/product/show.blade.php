@@ -32,14 +32,17 @@
                 <div class="col-lg-6">
                     <div class="product__details__text">
                         <h3>{{ $data['product']->name }} <span>Kategori: {{ $data['product']->Category->name }}</span></h3>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <span>( 1 reviews )</span>
-                        </div>
+                       @php $ratenum = number_format($averageRating) @endphp
+                       <div class="rating">
+                        @for($i = 1; $i <= $ratenum; $i++)
+                        <i class="fa fa-star checked" style="color: yellow;"></i> <!-- Bintang terisi berwarna kuning -->
+                        @endfor
+                        @for($j=$ratenum+1; $j<= 5; $j++)
+                        <i class="fa fa-star" style="color: gray;"></i> <!-- Bintang tidak terisi berwarna abu-abu -->
+                        @endfor
+                        <span>{{ $averageRating }}</span>
+                        <span>({{$totalUsers}} riviews)</span>
+                    </div>
                         <form action="{{ route('cart.store') }}" method="POST">
                         <div class="product__details__price">
                             @if ($data['product']->discounted_price)

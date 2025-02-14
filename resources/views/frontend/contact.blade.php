@@ -18,17 +18,17 @@
                                     <div id="form-message-success" class="mb-4">
                                       <p>Selamat Datang di toko kami🙏💓. <br>
 										🏠Disini anekabarangsby,Ada yang bisa kami bantu?<br>
-										🚴Pengiriman Go-Send maksimal jam 20.00.<br>
-										🚛Pengiriman jnt ekspres cepat kirim(COD).<br>
+										🏠Ada yang ditanyakan terkait produk kami silahkan Whatsapp / Email kami.<br>
+										🚛Pengiriman JNE, POS Indonesia, dan Tiki cepat kirim.<br>
 										🗣Pelayanan jam 8.00-jam 21.00.<br>
 										📦Pengiriman Barang Senin-Minggu di jam 16:30.<br>
-										🎟Follow toko kami untuk dapetin voucher diskon.<br>
-										🎁Barang kosong di kontak wa & shopee.<br>
+										🎟Dapetin kode voucher diskon.<br>
+										🎁Produk kosong di hubungi melalui Whatsapp.<br>
 										🍦Barang wajib pakai packing luar jawa timur.<br>
 										🛍Selamat Berbelanja,<br>
 										Terima Kasih Pelanggan🙋</p>
                                     </div>
-                                    <form method="POST" id="contactForm" name="contactForm" class="contactForm">
+                                    <form method="POST" action="#" id="contactForm" name="contactForm" class="contactForm">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
