@@ -32,7 +32,10 @@
                 <div class="col-lg-6">
                     <div class="product__details__text">
                         <h3>{{ $data['product']->name }} <span>Kategori: {{ $data['product']->Category->name }}</span></h3>
-                       @php $ratenum = number_format($averageRating) @endphp
+                        @php 
+                           $ratenum = number_format($averageRating) > 0 ? number_format($averageRating) : 0; 
+                           $totalUsersDisplay = $totalUsers > 0 ? $totalUsers : 0; 
+                       @endphp
                        <div class="rating">
                         @for($i = 1; $i <= $ratenum; $i++)
                         <i class="fa fa-star checked" style="color: yellow;"></i> <!-- Bintang terisi berwarna kuning -->
@@ -40,8 +43,8 @@
                         @for($j=$ratenum+1; $j<= 5; $j++)
                         <i class="fa fa-star" style="color: gray;"></i> <!-- Bintang tidak terisi berwarna abu-abu -->
                         @endfor
-                        <span>{{ $averageRating }}</span>
-                        <span>({{$totalUsers}} riviews)</span>
+                        <span>{{ $averageRating > 0 ? $averageRating : 0 }}</span>
+                        <span>({{ $totalUsersDisplay }} reviews)</span>
                     </div>
                         <form action="{{ route('cart.store') }}" method="POST">
                         <div class="product__details__price">
@@ -92,6 +95,81 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Testimoni Produk</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                        <div class="summary mb-4">
+        <p><strong>Total Users Rated:</strong> {{ $totalUsers > 0 ? $totalUsers : 0 }}</p>
+        <p><strong>Total Stars:</strong> {{ $averageRating > 0 ? $averageRating : 0 }} dari 5</p>
+        @php $ratenum = number_format($averageRating) > 0 ? number_format($averageRating) : 0 @endphp
+        <div class="rating">
+            @for($i = 1; $i <= $ratenum; $i++)
+                <i class="fa fa-star checked" style="color: yellow;"></i> <!-- Bintang terisi berwarna kuning -->
+            @endfor
+            @for($j=$ratenum+1; $j<= 5; $j++)
+                <i class="fa fa-star" style="color: gray;"></i> <!-- Bintang tidak terisi berwarna abu-abu -->
+            @endfor
+        </div>
+        <br>
+    </div>
+
+    @if ($data['product']->reviews->isEmpty())
+        <p class="text-muted text-center">No reviews yet. Be the first to review this product!</p>
+    @else
+        <div class="reviews-container card p-3">
+            @foreach ($data['product']->reviews as $review)
+                <div class="review card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="review-user">{{ $review->user->name }}</strong>
+                            <div class="rating">
+                                @php $ratenum = number_format($review->rating) @endphp
+                                @for($i = 1; $i <= $ratenum; $i++)
+                                    <i class="fa fa-star checked" style="color: yellow;"></i> <!-- Bintang terisi berwarna kuning -->
+                                @endfor
+                                @for($j=$ratenum+1; $j<= 5; $j++)
+                                    <i class="fa fa-star" style="color: gray;"></i> <!-- Bintang tidak terisi berwarna abu-abu -->
+                                @endfor
+                            </div>
+                        </div>
+                        <p class="review-text mb-3">{{ $review->review }}</p>
+
+                        <!-- Container untuk gambar dan video -->
+                        <div class="row">
+                            <!-- Tampilkan gambar jika ada -->
+                            @if ($review->image)
+                                <div class="col-md-4 mb-3">
+                                    <div class="review-media">
+                                        <img src="{{ asset('storage/' . $review->image) }}" alt="Review Image" class="img-fluid rounded" style="max-width: 100%; height: 100%;">
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Tampilkan video jika ada -->
+                            @if ($review->video)
+                                <div class="col-md-4 mb-3">
+                                    <div class="review-media">
+                                        <video controls class="img-fluid rounded" style="max-width: 100%; height: 100%;">
+                                            <source src="{{ asset('storage/' . $review->video) }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+</div>
+                    </div> 
                 </div>
             </div>
             <div class="row">

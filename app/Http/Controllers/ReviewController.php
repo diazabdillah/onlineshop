@@ -31,7 +31,7 @@ class ReviewController extends Controller
             'rating_pelayanan' => 'required|integer|min:1|max:5',
             'rating_pengiriman' => 'required|integer|min:1|max:5',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi untuk gambar
-            'video' => 'nullable|mimes:mp4,mov,avi|max:10240', // Validasi untuk video
+            'video' => 'nullable|mimes:mp4,mov,avi|max:50240', // Validasi untuk video
         ]);
 
         // Simpan gambar jika ada

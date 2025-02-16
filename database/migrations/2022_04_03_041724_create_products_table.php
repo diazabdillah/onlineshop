@@ -22,6 +22,10 @@ class CreateProductsTable extends Migration
             $table->string('price');
             $table->string('weight');
             $table->text('description');
+            $table->string('stok');
+            $table->string('ukuran');
+            $table->string('kondisi');
+            $table->string('warna');
             $table->timestamps();
         });
     }

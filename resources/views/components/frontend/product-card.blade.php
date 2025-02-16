@@ -46,14 +46,22 @@
                 <span>Rp {{ number_format($price, 0, ',', '.') }}</span>
             @endif
         </div>
+        @php 
+            $averageRating = $averageRating ?? 0;
+            $totalUsers = $totalUsers ?? 0;
+            $ratenum = number_format($averageRating) > 0 ? number_format($averageRating) : 0; 
+            $totalUsersDisplay = $totalUsers > 0 ? $totalUsers : 0; 
+        @endphp
         <div class="rating">
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <span>( 1 reviews )</span>
-        </div>
+                        @for($i = 1; $i <= $ratenum; $i++)
+                        <i class="fa fa-star checked" style="color: yellow;"></i> <!-- Bintang terisi berwarna kuning -->
+                        @endfor
+                        @for($j=$ratenum+1; $j<= 5; $j++)
+                        <i class="fa fa-star" style="color: gray;"></i> <!-- Bintang tidak terisi berwarna abu-abu -->
+                        @endfor
+                        <span>{{ $averageRating > 0 ? $averageRating : 0 }}</span>
+                        <span>({{ $totalUsersDisplay }} reviews)</span>
+                    </div>
         <div class="product__stock">
         <i class="fa fa-cubes"></i>
         <span>{{ $stok ? $stok : '0' }} Unit</span> 

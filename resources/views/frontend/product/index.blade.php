@@ -32,6 +32,11 @@
                                     @slot('discount_percentage', $product_related->discount_percentage ?? null)
                                     @slot('stok', $product_related->stok ?? null)
                                     @slot('penjualan', $product_related->penjualan ?? null)
+                                    <!-- @slot('rating', $product_related->rating ?? null)
+                                    @slot('totalStars', $totalStars ?? 0)
+                                    @slot('totalUsers', $totalUsers ?? 0)
+                                    @slot('averageRating', $averageRating ?? 0) -->
+                                
                                     @slot('chart', route('product.show', ['categoriSlug' => $product_related->Category->slug, 'productSlug' => $product_related->slug]))
                                     <!-- @slot('checkout', route('product.show', ['categoriSlug' => $product_related->Category->slug, 'productSlug' => $product_related->slug])) Persentase diskon -->
                                 @endcomponent

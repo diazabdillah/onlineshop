@@ -89,116 +89,128 @@
                                                         <td class="text-center">{{ $detail->qty }}</td>
                                                         <td class="text-right">
                                                             {{ rupiah($detail->total_price_per_product) }}</td>
-                                                            <td class="text-right">   <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                                Riview Product
-                                            </button></td>
+                                                            <td class="text-right">   
+                                                                <button class="btn btn-primary" 
+                                                                        data-toggle="modal" 
+                                                                        data-target="#modal-{{ $detail->product->id }}" 
+                                                                        data-product-id="{{ $detail->product->id }}"
+                                                                        {{ $data['order']->status == 'selesai' && !$detail->review ? '' : 'disabled' }}
+                                                                        style="{{ $data['order']->status == 'selesai' && !$detail->review ? '' : 'cursor: not-allowed;' }}">
+                                                                    Review Product
+                                                                </button>
+                                                            </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                     
-                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        @php $details = $data['order']->orderDetail()->get(); @endphp
+                                        @foreach ($details as $detail) 
+                                        <div class="modal fade" 
+                                            id="modal-{{ $detail->product->id }}" 
+                                            tabindex="-1" 
+                                            role="dialog" 
+                                            aria-labelledby="modalLabel-{{ $detail->product->id }}" 
+                                            aria-hidden="true">
                                             <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Riview Product</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <form action="{{ route('reviews.store', $detail->product->id) }}" method="POST" enctype="multipart/form-data">
-                                                        @csrf
-                                                    <div class="modal-body">
-                                                        
-                                                            <!-- Nama Produk -->
-                                                            <div class="product-info d-flex align-items-center">
-                                                                <img src="{{ asset('storage/' . $detail->product->thumbnails ) }}" alt="{{ $detail->product->thumbnails }}" width="50" height="50" style="border-radius: 50%;">
-                                                                <h6 class="mr-3">{{ $detail->product->name }}</h6>
-                                                            </div>
-                                                        
-                                                            <!-- Rating Kualitas Produk -->
-                                                            <div class="rating-css">
-                                                                <label for="product_rating">Kualitas Produk</label> <br>
-                                                                <div class="star-icon">
-                                                                    <input type="radio" value="1" name="rating" checked id="rating1">
-                                                                    <label for="rating1" class="fa fa-star"></label>
-                                                                    <input type="radio" value="2" name="rating" id="rating2">
-                                                                    <label for="rating2" class="fa fa-star"></label>
-                                                                    <input type="radio" value="3" name="rating" id="rating3">
-                                                                    <label for="rating3" class="fa fa-star"></label>
-                                                                    <input type="radio" value="4" name="rating" id="rating4">
-                                                                    <label for="rating4" class="fa fa-star"></label>
-                                                                    <input type="radio" value="5" name="rating" id="rating5">
-                                                                    <label for="rating5" class="fa fa-star"></label>
-                                                                </div>
-                                                            </div>
-                                                        
-                                                            <!-- Rating Pelayanan Penjual -->
-                                                            <div class="rating-css">
-                                                                <label for="seller_rating">Pelayanan Penjual</label> <br>
-                                                                <div class="star-icon">
-                                                                    <input type="radio" value="1" name="rating_pelayanan" checked id="seller_rating1">
-                                                                    <label for="seller_rating1" class="fa fa-star"></label>
-                                                                    <input type="radio" value="2" name="rating_pelayanan" id="seller_rating2">
-                                                                    <label for="seller_rating2" class="fa fa-star"></label>
-                                                                    <input type="radio" value="3" name="rating_pelayanan" id="seller_rating3">
-                                                                    <label for="seller_rating3" class="fa fa-star"></label>
-                                                                    <input type="radio" value="4" name="rating_pelayanan" id="seller_rating4">
-                                                                    <label for="seller_rating4" class="fa fa-star"></label>
-                                                                    <input type="radio" value="5" name="rating_pelayanan" id="seller_rating5">
-                                                                    <label for="seller_rating5" class="fa fa-star"></label>
-                                                                </div>
-                                                            </div>
-                                                        
-                                                            <!-- Rating Kecepatan Pengiriman -->
-                                                            <div class="rating-css">
-                                                                <label for="delivery_rating">Kecepatan Pengiriman</label> <br>
-                                                                <div class="star-icon">
-                                                                    <input type="radio" value="1" name="rating_pengiriman" checked id="delivery_rating1">
-                                                                    <label for="delivery_rating1" class="fa fa-star"></label>
-                                                                    <input type="radio" value="2" name="rating_pengiriman" id="delivery_rating2">
-                                                                    <label for="delivery_rating2" class="fa fa-star"></label>
-                                                                    <input type="radio" value="3" name="rating_pengiriman" id="delivery_rating3">
-                                                                    <label for="delivery_rating3" class="fa fa-star"></label>
-                                                                    <input type="radio" value="4" name="rating_pengiriman" id="delivery_rating4">
-                                                                    <label for="delivery_rating4" class="fa fa-star"></label>
-                                                                    <input type="radio" value="5" name="rating_pengiriman" id="delivery_rating5">
-                                                                    <label for="delivery_rating5" class="fa fa-star"></label>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                          <!-- Ulasan -->
-                                                          <div class="form-group">
-                                                            <label for="review">Ulasan</label>
-                                                            <textarea name="review" rows="4" cols="5" class="form-control" required></textarea>
-                                                        </div>
-                                                     
-                                                        <!-- Upload Gambar -->
-                                                        <div class="form-group">
-                                                            <label for="image">Upload Gambar (opsional):</label>
-                                                            <input type="file" name="image" id="image" class="form-control-file" accept="image/*">
-                                                        </div>
-                                                     
-                                                        <!-- Upload Video -->
-                                                        <div class="form-group">
-                                                            <label for="video">Upload Video (opsional):</label>
-                                                            <input type="file" name="video" id="video" class="form-control-file" accept="video/*">
-                                                        </div>
-                                                     
-                                                            {{-- <!-- Tombol Submit -->
-                                                            <div class="submit-button">
-                                                                <button type="submit">Submit Review</button>
-                                                            </div> --}}
-                                                      
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                        <button type="submit" class="btn btn-primary">Simpan</button>
-                                                    </div>
-                                                </form>
-                                                </div>
-                                            </div>
-                                        </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel-{{ $detail->product->id }}">Review Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('reviews.store', $detail->product->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <!-- Product Info -->
+                    <div class="product-info d-flex align-items-center">
+                        <img src="{{ asset('storage/' . $detail->product->thumbnails ) }}" 
+                             alt="{{ $detail->product->thumbnails }}" 
+                             width="50" 
+                             height="50" 
+                             style="border-radius: 50%;">
+                       &nbsp; &nbsp;<h6 class="mr-3">{{ $detail->product->name }}</h6>
+                    </div>
+
+                    <!-- Ratings -->
+                    <div class="rating-css">
+                        <label for="product_rating">Kualitas Produk</label> <br>
+                        <div class="star-icon">
+                            <input type="radio" value="1" name="rating" checked id="rating1-{{ $detail->product->id }}">
+                            <label for="rating1-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="2" name="rating" id="rating2-{{ $detail->product->id }}">
+                            <label for="rating2-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="3" name="rating" id="rating3-{{ $detail->product->id }}">
+                            <label for="rating3-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="4" name="rating" id="rating4-{{ $detail->product->id }}">
+                            <label for="rating4-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="5" name="rating" id="rating5-{{ $detail->product->id }}">
+                            <label for="rating5-{{ $detail->product->id }}" class="fa fa-star"></label>
+                        </div>
+                    </div>
+
+                    <!-- Seller Rating -->
+                    <div class="rating-css">
+                        <label for="seller_rating">Pelayanan Penjual</label> <br>
+                        <div class="star-icon">
+                            <input type="radio" value="1" name="rating_pelayanan" checked id="seller_rating1-{{ $detail->product->id }}">
+                            <label for="seller_rating1-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="2" name="rating_pelayanan" id="seller_rating2-{{ $detail->product->id }}">
+                            <label for="seller_rating2-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="3" name="rating_pelayanan" id="seller_rating3-{{ $detail->product->id }}">
+                            <label for="seller_rating3-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="4" name="rating_pelayanan" id="seller_rating4-{{ $detail->product->id }}">
+                            <label for="seller_rating4-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="5" name="rating_pelayanan" id="seller_rating5-{{ $detail->product->id }}">
+                            <label for="seller_rating5-{{ $detail->product->id }}" class="fa fa-star"></label>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Rating -->
+                    <div class="rating-css">
+                        <label for="delivery_rating">Kecepatan Pengiriman</label> <br>
+                        <div class="star-icon">
+                            <input type="radio" value="1" name="rating_pengiriman" checked id="delivery_rating1-{{ $detail->product->id }}">
+                            <label for="delivery_rating1-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="2" name="rating_pengiriman" id="delivery_rating2-{{ $detail->product->id }}">
+                            <label for="delivery_rating2-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="3" name="rating_pengiriman" id="delivery_rating3-{{ $detail->product->id }}">
+                            <label for="delivery_rating3-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="4" name="rating_pengiriman" id="delivery_rating4-{{ $detail->product->id }}">
+                            <label for="delivery_rating4-{{ $detail->product->id }}" class="fa fa-star"></label>
+                            <input type="radio" value="5" name="rating_pengiriman" id="delivery_rating5-{{ $detail->product->id }}">
+                            <label for="delivery_rating5-{{ $detail->product->id }}" class="fa fa-star"></label>
+                        </div>
+                    </div>
+
+                    <!-- Review Text -->
+                    <div class="form-group">
+                        <label for="review">Ulasan</label>
+                        <textarea name="review" rows="4" cols="5" class="form-control" required></textarea>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="form-group">
+                        <label for="image">Upload Gambar (opsional):</label>
+                        <input type="file" name="image" id="image" class="form-control-file" accept="image/*">
+                    </div>
+
+                    <!-- Video Upload -->
+                    <div class="form-group">
+                        <label for="video">Upload Video (opsional):</label>
+                        <input type="file" name="video" id="video" class="form-control-file" accept="video/*">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+   
+</div>
+@endforeach
                                     </div>
                                     <div class="row mt-4">
                                         <div class="col-lg-8">

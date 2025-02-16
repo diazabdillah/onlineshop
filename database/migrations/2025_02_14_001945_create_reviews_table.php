@@ -19,6 +19,8 @@ class CreateReviewsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->text('review');
             $table->integer('rating');
+            $table->integer('rating_pelayanan');
+            $table->integer('rating_pengiriman');
             $table->string('image')->nullable(); // Kolom untuk menyimpan path gambar
             $table->string('video')->nullable(); // Kolom untuk menyimpan path video
             $table->timestamps();

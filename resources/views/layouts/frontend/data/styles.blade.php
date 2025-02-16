@@ -23,6 +23,23 @@ rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
+  .review-text {
+    font-size: 14px;
+    color: #555;
+}
+
+.review-media img, .review-media video {
+    border: 1px solid #ddd; /* Garis border untuk gambar dan video */
+    padding: 5px;
+    background-color: #f9f9f9;
+    border-radius: 5px; /* Sudut melengkung */
+}
+
+.reviews-container {
+    background-color: #fff; /* Warna latar card */
+    border: 1px solid #ddd; /* Garis border card */
+    border-radius: 5px; /* Sudut melengkung card */
+}
   .form-control:focus {
     box-shadow: none;
     border-color: #BA68C8

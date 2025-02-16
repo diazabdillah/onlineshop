@@ -26,8 +26,16 @@ class ProductController extends Controller
         //   // Hitung total bintang (jumlah rating)
         //   $totalStars = $product->reviews->sum('rating');
         //   $averageRating = $totalStars / max($totalUsers, 1);
-        $data['product'] = $this->product->getPaginate(12);
-        return view('frontend.product.index',compact('data'));
+        $data['product'] = $this->product->Query()->with('reviews.user')->paginate(12);
+    
+    // Hitung rating untuk setiap produk
+    $data['product']->each(function ($product) {
+        $product->totalUsers = $product->reviews->count();
+        $product->totalStars = $product->reviews->sum('rating');
+        $product->averageRating = $product->totalStars / max($product->totalUsers, 1);
+    });
+        
+        return view('frontend.product.index', compact('data'));
     }
 
     public function show($categoriSlug,$productSlug)
@@ -46,18 +54,17 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-          // Ambil data produk beserta review-nya
-          $product = Product::with('reviews.user')->findOrFail($productId);
-
-          // Hitung jumlah user yang memberikan rating
-          $totalUsers = $product->reviews->count();
-  
-          // Hitung total bintang (jumlah rating)
-          $totalStars = $product->reviews->sum('rating');
-          $averageRating = $totalStars / max($totalUsers, 1);
-        $data['product'] = $this->product->Query()->where('name','like','%'.$request->q.'%')->paginate
-        (12);
-
-        return view('frontend.product.search',compact('data'));
+        // ... existing code ...
+        $data['product'] = $this->product->Query()->with('reviews.user')->where('name', 'like', '%' . $request->q . '%')->paginate(12);
+        
+       // Hitung rating untuk setiap produk
+    $data['product']->each(function ($product) {
+        $product->totalUsers = $product->reviews->count();
+        $product->totalStars = $product->reviews->sum('rating');
+        $product->averageRating = $product->totalStars / max($product->totalUsers, 1);
+    });
+        
+        
+        return view('frontend.product.search', compact('data'));
     }
 }
