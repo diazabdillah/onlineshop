@@ -19,6 +19,9 @@ use App\Http\Controllers\Setting\WebconfigController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Role;
+use BotMan\BotMan\BotMan;
+use Illuminate\Http\Request;
+use BotMan\BotMan\Messages\Incoming\Answer;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +36,73 @@ use Spatie\Permission\Contracts\Role;
 
 Route::post('payments/midtrans-notification', [MidtransController::class, 'receive']);
 Route::get('payments/midtrans-success', [MidtransController::class, 'success']);
+Route::get('/chat', function () {
+    return view('chatbot');
+});
+// ... existing code ...
+Route::match(['get', 'post'], '/botman', function() {
+    $botman = app('botman');
 
+    // Percakapan awal
+    $botman->hears('halo|hi|hey', function (BotMan $bot) {
+        $bot->reply('Halo juga! Saya adalah bot yang siap membantu Anda.');
+        $bot->ask('Boleh tau nama kamu siapa?', function(Answer $answer, $bot) {
+            $name = $answer->getText();
+            
+            $bot->say('Senang bertemu dengan Anda ' . $name . '!');
+            $bot->ask('Boleh minta alamat email kamu?', function(Answer $answer, $bot) {
+                $email = $answer->getText();
+                
+                $bot->say('Terima kasih! Email Anda: ' . $email);
+                $bot->ask('Bagaimana kabar Anda hari ini?', function(Answer $answer, $bot) {
+                    $response = $answer->getText();
+                    $bot->say('Senang mendengarnya! Ada yang bisa saya bantu? Ketik "Bantuan" untuk melihat menu.');
+                });
+            });
+        });
+    });
 
+    // Menu bantuan
+    $botman->hears('Bantuan', function(BotMan $bot) {
+        $bot->reply('Berikut beberapa hal yang bisa saya bantu: 
+        1. Informasi produk </br>
+        2. Cara pemesanan </br>
+        3. Status pesanan</br>
+        
+        Silakan ketik nomor atau menu yang Anda inginkan.');
+    });
 
+    // Respon untuk pilihan menu
+    $botman->hears('1|Informasi produk', function(BotMan $bot) {
+        $bot->reply('Kami menyediakan berbagai produk berkualitas. Silakan kunjungi halaman produk kami di website untuk informasi lebih detail.');
+    });
+
+    $botman->hears('2|Cara pemesanan', function(BotMan $bot) {
+        $bot->reply('Untuk melakukan pemesanan:
+        1. Pilih produk yang diinginkan
+        2. Masukkan ke keranjang
+        3. Klik checkout
+        4. Isi data pengiriman
+        5. Pilih metode pembayaran
+        6. Selesaikan pembayaran');
+    });
+
+    $botman->hears('3|Status pesanan', function(BotMan $bot) {
+        $bot->reply('Untuk mengecek status pesanan, silakan login ke akun Anda dan kunjungi menu "Transaksi".');
+    });
+
+    // Percakapan umum
+    // $botman->hears('Gimana kabar?', function(BotMan $bot) {
+    //     $bot->reply('Alhamdulillah baik! Bagaimana dengan Anda?');
+    // });
+
+    $botman->hears('Terima kasih', function(BotMan $bot) {
+        $bot->reply('Sama-sama! Senang bisa membantu Anda.');
+    });
+
+    $botman->listen();
+});
+// ... existing code ...
 Route::prefix('app')->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::get('dashboard',[DashboardController::class,'index'])->name('admin.dashboard');

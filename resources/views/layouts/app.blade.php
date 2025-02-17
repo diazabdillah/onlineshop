@@ -9,7 +9,7 @@
         <title>Anekabarangsby</title>
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/assets/css/chat.min.css">
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
@@ -32,5 +32,7 @@
                 {{ $slot }}
             </main>
         </div>
+      
+       
     </body>
 </html>
