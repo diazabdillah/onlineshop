@@ -23,6 +23,10 @@
                     <x-forms.input type="number" name="weight" id="weight" :label="__('field.weight')" :isRequired="true"/>
 
                     <x-forms.input type="number" name="price" id="price" :label="__('field.price')" :isRequired="true" />
+                    <x-forms.input type="number" name="stok" id="stok" :label="__('Stok')" :isRequired="true" />
+                    <x-forms.input name="kondisi" id="kondisi" :label="__('Kondisi')" :isRequired="true" />
+                    <x-forms.input name="ukuran" id="ukuran" :label="__('Ukuran')" :isRequired="true" />
+                    <x-forms.input name="warna" id="warna" :label="__('Warna')" :isRequired="true" />
 
                     <x-forms.input type="textarea" name="description" id="description" :label="__('field.description')" :isRequired="true" />
 

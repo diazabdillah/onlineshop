@@ -26,3 +26,4 @@ return [
         'driver' => 'file',
     ],
 ];
+?>

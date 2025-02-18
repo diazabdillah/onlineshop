@@ -12,6 +12,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/assets/css/chat.min.css">
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>

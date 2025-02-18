@@ -16,12 +16,14 @@ use App\Http\Controllers\Midtrans\MidtransController;
 use App\Http\Controllers\Rajaongkir\RajaongkirController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Setting\WebconfigController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Role;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use BotMan\BotMan\Messages\Incoming\Answer;
+use App\Events\ChatMessageSent;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +38,9 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 
 Route::post('payments/midtrans-notification', [MidtransController::class, 'receive']);
 Route::get('payments/midtrans-success', [MidtransController::class, 'success']);
-Route::get('/chat', function () {
-    return view('chatbot');
-});
+// Route::get('/chat', function () {
+//     return view('chatbot');
+// });
 // ... existing code ...
 Route::match(['get', 'post'], '/botman', function() {
     $botman = app('botman');
@@ -102,9 +104,29 @@ Route::match(['get', 'post'], '/botman', function() {
 
     $botman->listen();
 });
+
+// Route::match(['get', 'post'], '/botman/webhook', function () {
+//     $botman = app('botman');
+
+//     $botman->hears('hello', function (BotMan $bot) {
+//         $message = 'Hello! How can I help you?';
+//         $bot->reply($message);
+//         event(new ChatMessageSent($message));
+//     });
+
+//     $botman->hears('goodbye', function (BotMan $bot) {
+//         $message = 'Goodbye! Have a great day!';
+//         $bot->reply($message);
+//         event(new ChatMessageSent($message));
+//     });
+
+//     $botman->listen();
+// });
 // ... existing code ...
 Route::prefix('app')->group(function () {
+    Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');
     Route::middleware(['auth'])->group(function () {
+
         Route::get('dashboard',[DashboardController::class,'index'])->name('admin.dashboard');
         
 
@@ -160,7 +182,8 @@ Route::prefix('app')->group(function () {
 
 Route::middleware('auth','role:user')->group(function(){
     Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
-
+    Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');
     Route::prefix('cart')->name('cart.')->group(function(){
         Route::get('/',[CartController::class,'index'])->name('index');
         Route::post('/store',[CartController::class,'store'])->name('store');

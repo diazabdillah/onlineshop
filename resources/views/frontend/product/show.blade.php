@@ -77,6 +77,18 @@
                                     <span>Stok : </span>
                                     <p>{{ $data['product']->stok }} Unit</p> <!-- Menambahkan informasi stok -->
                                 </li>
+                                <li>
+                                    <span>Kondisi : </span>
+                                    <p>{{ $data['product']->kondisi }}</p> <!-- Menambahkan informasi stok -->
+                                </li>
+                                <li>
+                                    <span>Ukuran : </span>
+                                    <p>{{ $data['product']->ukuran }} </p> <!-- Menambahkan informasi stok -->
+                                </li>
+                                <li>
+                                    <span>Warna : </span>
+                                    <p>{{ $data['product']->warna }} </p> <!-- Menambahkan informasi stok -->
+                                </li>
                             </ul>
                         </div>
                     </div>
