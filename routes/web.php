@@ -98,7 +98,7 @@ Route::match(['get', 'post'], '/botman', function() {
     //     $bot->reply('Alhamdulillah baik! Bagaimana dengan Anda?');
     // });
 
-    $botman->hears('Terima kasih', function(BotMan $bot) {
+    $botman->hears('terima kasih', function(BotMan $bot) {
         $bot->reply('Sama-sama! Senang bisa membantu Anda.');
     });
 
@@ -130,7 +130,9 @@ Route::prefix('app')->group(function () {
 
         Route::get('dashboard',[DashboardController::class,'index'])->name('admin.dashboard');
         Route::get('/chatadmin', [ChatController::class, 'showChatadmin'])->name('chat.showadmin');
+        Route::get('/chatadmin/{receiverId}', [ChatController::class, 'showChatadmin'])->name('chat.showadmin');
         Route::post('/chat/sendadmin', [ChatController::class, 'sendMessageadmin'])->name('chat.sendadmin');
+        Route::post('/chat/endadmin', [ChatController::class, 'endChat'])->name('chat.endadmin');
 
 
         Route::prefix('customer')->name('customer.')->group(function () {

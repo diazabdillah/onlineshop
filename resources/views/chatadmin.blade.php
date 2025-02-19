@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with User {{ $receiverId }}</title>
+    <title>Anekabarangsby</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -155,7 +155,7 @@
             </button>
         </a>
         <h1 style="margin: 0;">Chat Customer Service</h1>
-        <form action="{{ route('chat.end') }}" method="POST" style="margin: 0;">
+        <form action="{{ route('chat.endadmin') }}" method="POST" style="margin: 0;">
             @csrf
             <button type="submit" 
                 {{ count($messages) == 0 ? 'disabled' : '' }}
@@ -174,7 +174,7 @@
         @endif
         
         <div class="message {{ $message->user_id == auth()->id() ? 'sender' : 'receiver' }}">
-            <strong style="float:right;">{{ $message->user_id == auth()->id() ? 'Admin' : 'User' }}</strong>
+            <strong style="float:right;">{{ $message->user_id == auth()->id() ? 'You' : 'User' }}</strong>
             
             <br>
             {{ $message->message }}
@@ -204,7 +204,7 @@
     
     <form action="{{ route('chat.sendadmin') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    <input type="hidden" name="receiver_id" value="{{ $userChat->id }}">
+    <input type="hidden" name="receiver_id" value="{{ $receiverId }}">
     <input type="text" name="message" id="messageInput" placeholder="Type your message...">
     <input type="file" name="attachment" id="attachmentInput" accept="image/*,video/*">
     <button type="submit" id="sendButton" disabled style="opacity: 0.6; cursor: not-allowed;">Send</button>
@@ -232,5 +232,45 @@
         messageInput.addEventListener('input', checkInputs);
         attachmentInput.addEventListener('change', checkInputs);
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.11.1/echo.iife.js"></script>
+     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+     <script>
+         import Echo from "laravel-echo";
+     
+         window.Pusher = require('pusher-js');
+     
+         window.Echo = new Echo({
+         broadcaster: 'pusher',
+         key: "{{ config('broadcasting.connections.pusher.key') }}",
+         cluster: "{{ config('broadcasting.connections.pusher.options.cluster') }}",
+         forceTLS: true
+     });
+     
+         // Listen for the MessageSent event
+         const userId = {{ auth()->id() }};
+window.Echo.private(`chat.${receiverId}`)
+    .listen('ChatMessageSent', (e) => {
+        const chat = document.getElementById('chat');
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('message-container');
+
+        const profilePic = document.createElement('img');
+        profilePic.classList.add('profile-pic');
+        profilePic.src = e.message.user_id === userId
+            ? "{{ asset('storage/profile/profile.png') }}"
+            : "{{ asset('storage/profile/admin-avatar.png') }}";
+
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', e.message.user_id === userId ? 'sender' : 'receiver');
+        messageDiv.innerHTML = `<strong>${e.message.user_id === userId ? 'You' : 'User'}</strong><br>${e.message.message}`;
+
+        messageContainer.appendChild(profilePic);
+        messageContainer.appendChild(messageDiv);
+        chat.appendChild(messageContainer);
+
+        // Scroll otomatis ke bawah
+        chat.scrollTop = chat.scrollHeight;
+    });
+     </script>
 </body>
 </html>

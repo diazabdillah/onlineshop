@@ -3,70 +3,73 @@
 namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Models\User;
-use App\Events\MessageSent;
+use App\Events\ChatMessageSent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
     public function sendMessage(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'message' => 'string',
-            'receiver_id' => 'required|exists:users,id',
-            'attachment' => 'nullable|mimes:jpg,jpeg,png,gif,mp4,webm,ogg|max:10240', // Maksimal 10MB
-        ]);
-    
-        // Data pesan yang akan disimpan
-        $data = [
-            'user_id' => Auth::id(),
-            'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
-        ];
-    
-        // Simpan file jika ada attachment
-        if ($request->hasFile('attachment')) {
-            // Simpan file ke dalam folder storage/attachments
-            $path = $request->file('attachment')->store('attachments', 'public');
-            $data['attachment'] = $path;
-        }
-    
-        // Simpan data ke dalam tabel pesan
-        Message::create($data);
-    
-        // Redirect kembali ke halaman chat
-        return redirect()->route('chat.show', ['receiver_id' => $request->receiver_id]);
+{
+    // Validasi input
+    $request->validate([
+        'message' => 'string',
+        'attachment' => 'nullable|mimes:jpg,jpeg,png,gif,mp4,webm,ogg|max:10240', // Maksimal 10MB
+    ]);
+
+    // Data pesan yang akan disimpan
+    $data = [
+        'user_id' => Auth::id(),
+        'receiver_id' => $request->receiver_id,
+        'message' => $request->message,
+    ];
+
+    // Simpan file jika ada attachment
+    if ($request->hasFile('attachment')) {
+        // Simpan file ke dalam folder storage/attachments
+        $path = $request->file('attachment')->store('attachments', 'public');
+        $data['attachment'] = $path;
     }
-    public function sendMessageadmin(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'message' => 'required_without:attachment',
-            'attachment' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,webm,ogg|max:2048',
-            'receiver_id' => 'required|exists:users,id'
-        ]);
-    
-        // Data pesan yang akan disimpan
-        $data = [
-            'user_id' => Auth::id(),
-            'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
-        ];
-    
-        // Simpan file jika ada attachment
-        if ($request->hasFile('attachment')) {
-            // Simpan file ke dalam folder storage/attachments
-            $path = $request->file('attachment')->store('attachments', 'public');
-            $data['attachment'] = $path;
-        }
-    
-        // Simpan data ke dalam tabel pesan
-        Message::create($data);
-    
-        // Redirect kembali ke halaman chat
-        return redirect()->route('chat.showadmin', ['receiver_id' => $request->receiver_id]);
+
+    // Simpan data ke dalam tabel pesan
+    $message = Message::create($data);
+
+    // Broadcast event
+    broadcast(new ChatMessageSent($message))->toOthers();
+
+    // Redirect kembali ke halaman chat
+    return redirect()->route('chat.show', ['receiver_id' => $request->receiver_id]);
+}
+public function sendMessageadmin(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'message' => 'required_without:attachment',
+        'attachment' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,webm,ogg|max:2048',
+        'receiver_id' => 'required|exists:users,id'
+    ]);
+
+    // Data pesan yang akan disimpan
+    $data = [
+        'user_id' => Auth::id(),
+        'receiver_id' => $request->receiver_id,
+        'message' => $request->message,
+    ];
+
+    // Simpan file jika ada attachment
+    if ($request->hasFile('attachment')) {
+        $path = $request->file('attachment')->store('attachments', 'public');
+        $data['attachment'] = $path;
     }
+
+    // Simpan data ke dalam tabel pesan
+    $message = Message::create($data);
+
+    // Broadcast event dengan data yang benar
+    broadcast(new ChatMessageSent($message))->toOthers();
+
+    return redirect()->route('chat.showadmin', ['receiverId' => $request->receiver_id]);
+}
     public function endChat()
     {
         // Ambil semua chat dari user yang sedang login
@@ -95,8 +98,9 @@ class ChatController extends Controller
 
     //     return response()->json($messages);
     // }
-    public function showChatAdmin($receiverId = null)
+    public function showChatAdmin($receiverId)
     {  
+        
         // Mengambil daftar user yang pernah chat dengan admin
         $userChats = User::select('users.*')
             ->join('messages', function($join) {
@@ -107,7 +111,7 @@ class ChatController extends Controller
             ->groupBy('users.id')
             ->get();
 
-        // Perbaikan: gunakan user pertama jika receiverId null
+        // // Perbaikan: gunakan user pertama jika receiverId null
         $selectedUser = $receiverId ? User::find($receiverId) : $userChats->first();
         $userId = $selectedUser ? $selectedUser->id : null;
         
