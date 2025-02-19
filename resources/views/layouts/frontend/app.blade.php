@@ -9,6 +9,7 @@
 
     @include('layouts.frontend.data.navbar')
     @yield('content')
+    
     @include('layouts.frontend.data.footer')
 
     <!-- Search Begin -->
@@ -20,6 +21,7 @@
             </form>
         </div>
     </div>
+   
     <!-- Search End -->
     @include('layouts.frontend.data.scripts')
 </body>

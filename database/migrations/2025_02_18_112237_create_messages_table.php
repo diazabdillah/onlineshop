@@ -17,7 +17,8 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id'); // ID pengirim
             $table->unsignedBigInteger('receiver_id'); // ID penerima
-            $table->text('message'); // Isi pesan
+            $table->text('message')->nullable(); // Isi pesan
+            $table->text('attachment')->nullable(); // Isi pesan
             $table->timestamps();
         });
     }

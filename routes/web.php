@@ -124,11 +124,14 @@ Route::match(['get', 'post'], '/botman', function() {
 // });
 // ... existing code ...
 Route::prefix('app')->group(function () {
-    Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');
+    
+
     Route::middleware(['auth'])->group(function () {
 
         Route::get('dashboard',[DashboardController::class,'index'])->name('admin.dashboard');
-        
+        Route::get('/chatadmin', [ChatController::class, 'showChatadmin'])->name('chat.showadmin');
+        Route::post('/chat/sendadmin', [ChatController::class, 'sendMessageadmin'])->name('chat.sendadmin');
+
 
         Route::prefix('customer')->name('customer.')->group(function () {
             Route::get('/', [CustomerController::class, 'index'])->name('index');
@@ -184,6 +187,8 @@ Route::middleware('auth','role:user')->group(function(){
     Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
     Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');
+    Route::post('/chat/end', [ChatController::class, 'endChat'])->name('chat.end');
+
     Route::prefix('cart')->name('cart.')->group(function(){
         Route::get('/',[CartController::class,'index'])->name('index');
         Route::post('/store',[CartController::class,'store'])->name('store');

@@ -22,16 +22,18 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="row">
-                        @foreach ($data['product'] as $product)
+                        @foreach ($data['product'] as $product_related)
                         <div class="col-lg-3 col-md-4">
                             @component('components.frontend.product-card')
-                            @slot('image', asset('storage/' . $product->thumbnails))
-                            @slot('route', route('product.show', ['categoriSlug' => $product->Category->slug, 'productSlug' =>
-                                $product->slug]))
-                                @slot('name', $product->name)
-                                @slot('price', $product->price)
-                                @slot('stok', $product->stok)
-                                @slot('penjualan', $product->penjualan)
+                            @slot('image', asset('storage/' . $product_related->thumbnails))
+                @slot('route', route('product.show', ['categoriSlug' => $product_related->Category->slug, 'productSlug' =>
+                    $product_related->slug]))
+                    @slot('name', $product_related->name)
+                    @slot('price', $product_related->price)
+                    @slot('discounted_price', $product_related->discounted_price ?? null) <!-- Harga diskon -->
+                    @slot('discount_percentage', $product_related->discount_percentage ?? null)
+                    @slot('stok', $product_related->stok ?? null) 
+                    @slot('penjualan', $product_related->penjualan ?? null)
                             @endcomponent
                         </div>
                         @endforeach

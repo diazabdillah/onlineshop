@@ -119,7 +119,36 @@
     </style>
 </head>
 <body>
-<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+<div style="display: flex; height: calc(100vh - 20px);">
+        <!-- Sidebar untuk daftar user -->
+        <div style="width: 300px; background-color: #f1f1f1; padding: 15px; border-right: 1px solid #ddd;">
+            <h2>Daftar User Chat</h2>
+            <div style="overflow-y: auto; height: calc(100% - 50px);">
+                @foreach($userChats as $userChat)
+                    <div class="user-chat-item" style="
+                        padding: 10px;
+                        margin-bottom: 10px;
+                        background-color: {{ $receiverId == $userChat->id ? '#e0f7fa' : 'white' }};
+                        border-radius: 5px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);"
+                        onclick="window.location.href='{{ route('chat.showadmin', ['receiverId' => $userChat->id]) }}'">
+                        <img src="{{ asset('storage/profile/user-avatar.png') }}" 
+                             alt="User Avatar" 
+                             style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                        <div>
+                            <div style="font-weight: bold;">{{ $userChat->name }}</div>
+                            <small style="color: #666;">{{ $userChat->latest_message ? \Illuminate\Support\Str::limit($userChat->latest_message, 30) : 'Belum ada pesan' }}</small>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+             
 <a href="/" class="back-button">
             <button style="padding: 8px 15px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">
                 <i class="fas fa-arrow-left"></i> Kembali
@@ -136,14 +165,16 @@
         </form>
     </div>
     <div id="chat">
+      
     @foreach ($messages as $message)
     <div class="message-container">
+        
         @if($message->user_id != auth()->id())
             <img src="{{ asset('storage/profile/admin-avatar.png') }}" alt="Admin" class="profile-pic">
         @endif
         
         <div class="message {{ $message->user_id == auth()->id() ? 'sender' : 'receiver' }}">
-            <strong style="float:right;">{{ $message->user_id == auth()->id() ? 'You' : 'Admin' }}</strong>
+            <strong style="float:right;">{{ $message->user_id == auth()->id() ? 'Admin' : 'User' }}</strong>
             
             <br>
             {{ $message->message }}
@@ -165,19 +196,22 @@
         </div>
         
         @if($message->user_id == auth()->id())
-            <img src="{{ asset('storage/profile/user-avatar.png') }}" alt="You" class="profile-pic">
+            <img src="{{ asset('storage/profile/profile.png') }}" alt="You" class="profile-pic">
         @endif
     </div>
 @endforeach
     </div>
     
-    <form action="{{ route('chat.send') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <input type="hidden" name="receiver_id" value="1">
-        <input type="text" name="message" id="messageInput" placeholder="Type your message...">
-        <input type="file" name="attachment" id="attachmentInput" accept="image/*,video/*">
-        <button type="submit" id="sendButton" disabled style="opacity: 0.6; cursor: not-allowed;">Send</button>
-    </form>
+    <form action="{{ route('chat.sendadmin') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="hidden" name="receiver_id" value="{{ $userChat->id }}">
+    <input type="text" name="message" id="messageInput" placeholder="Type your message...">
+    <input type="file" name="attachment" id="attachmentInput" accept="image/*,video/*">
+    <button type="submit" id="sendButton" disabled style="opacity: 0.6; cursor: not-allowed;">Send</button>
+</form>
+
+    </div>
+    </div>
     <script>
         const messageInput = document.getElementById('messageInput');
         const attachmentInput = document.getElementById('attachmentInput');

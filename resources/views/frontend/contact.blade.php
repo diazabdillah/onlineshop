@@ -147,5 +147,22 @@
             </div>
         </div>
     </section>
+    <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
+
+<script>
+        var botmanWidget = {
+            aboutText: 'Anekabarangsby',
+            introMessage: 'Selamat Datang di toko kami🙏💓.</br> 🏠Disini anekabarangsby, Ada yang bisa kami bantu?🏠Ada yang ditanyakan terkait produk kami silahkan. </br> 🚛Pengiriman JNE, POS Indonesia, dan Tiki cepat kirim.<br>🗣Pelayanan jam 8.00-jam 21.00.</br> 📦Pengiriman Barang Senin-Minggu di jam 16:30.</br> 🎟 Dapetin kode voucher diskon.</br>🎁Produk kosong di hubungi melalui chat.</br>🍦Barang wajib pakai packing luar jawa timur.</br>🛍Selamat Berbelanja,Terima Kasih Pelanggan🙋',
+            title: 'BOT Anekabarangsby',
+            mainColor: '#408591',
+            bubbleBackground: '#408591',
+            aboutLink: 'https://botman.io',
+            usePusher: true,
+            pusher: {
+                key: '{{ env("PUSHER_APP_KEY") }}',
+                cluster: '{{ env("PUSHER_APP_CLUSTER") }}'
+            }
+        };
+    </script>
     <!-- Product Section End -->
 @endsection

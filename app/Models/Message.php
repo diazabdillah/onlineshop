@@ -13,7 +13,7 @@ class Message extends Model
         'user_id',      // ID pengirim
         'receiver_id',  // ID penerima
         'message',      // Isi pesan
-        'attachment'
+        'attachment',
     ];
     public function user()
     {

@@ -21,7 +21,7 @@
         "tailwindcss": "^3.0.18"
     },
     "dependencies": {
-        "laravel-echo": "^2.0.0",
+        "laravel-echo": "^2.0.2",
         "pusher-js": "^8.4.0"
     }
 }
