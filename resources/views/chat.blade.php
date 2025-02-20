@@ -92,6 +92,7 @@
             margin-top: 5px;
         }
     </style>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
@@ -120,8 +121,9 @@
                 <div class="message {{ $message->user_id == auth()->id() ? 'sender' : 'receiver' }}">
                     <strong>{{ $message->user_id == auth()->id() ? 'You' : 'Admin' }}</strong>
                     <br>
-                    {{ $message->message }}
-
+                    <div class="message-content">
+                        {{ $message->message }}
+                    </div>
                     @if ($message->attachment && Str::endsWith($message->attachment, ['jpg', 'jpeg', 'png', 'gif']))
                         <br>
                         <img src="{{ asset('storage/' . $message->attachment) }}" alt="Attachment">
@@ -153,7 +155,6 @@
         <button type="submit" id="sendButton" disabled style="opacity: 0.6; cursor: not-allowed;">Send</button>
     </form>
 
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script>
         const messageInput = document.getElementById('messageInput');
         const attachmentInput = document.getElementById('attachmentInput');
@@ -173,37 +174,31 @@
 
         messageInput.addEventListener('input', checkInputs);
         attachmentInput.addEventListener('change', checkInputs);
-
-        // Pusher configuration
+    </script>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+        // Initialize Pusher
         const pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
             cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
             forceTLS: true
         });
-
-        const channel = pusher.subscribe('chat.1'); // Ganti dengan receiver_id yang sesuai
-        channel.bind('ChatMessageSent', function(data) {
-            const chat = document.getElementById('chat');
+        var channel = Echo.channel('my-channel');
+channel.listen('.my-event', function(data) {
+    const chatDiv = document.getElementById('chat');
             const messageContainer = document.createElement('div');
             messageContainer.classList.add('message-container');
 
-            const profilePic = document.createElement('img');
-            profilePic.src = data.message.user_id == {{ auth()->id() }} ? '{{ asset('storage/profile/user-avatar.png') }}' : '{{ asset('storage/profile/admin-avatar.png') }}';
-            profilePic.classList.add('profile-pic');
-            messageContainer.appendChild(profilePic);
-
             const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message', data.message.user_id == {{ auth()->id() }} ? 'sender' : 'receiver');
+            messageDiv.classList.add('message-content');
+            messageDiv.innerHTML = `<strong>${data.user_id == {{ auth()->id() }} ? 'You' : 'Admin'}</strong><br>${data.message}`;
 
-            const messageContent = document.createElement('span');
-            messageContent.innerText = data.message.message;
-
-            messageDiv.appendChild(messageContent);
             messageContainer.appendChild(messageDiv);
-            chat.appendChild(messageContainer);
+            chatDiv.appendChild(messageContainer);
 
-            // Scroll ke bawah
-            chat.scrollTop = chat.scrollHeight;
-        });
+            // Scroll to the bottom
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+});
+       
     </script>
 </body>
 </html>

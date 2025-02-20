@@ -34,8 +34,7 @@ class ChatController extends Controller
     // Simpan data ke dalam tabel pesan
     $message = Message::create($data);
 
-    // Broadcast event
-    broadcast(new ChatMessageSent($message))->toOthers();
+    event(new ChatMessageSent($message));
 
     // Redirect kembali ke halaman chat
     return redirect()->route('chat.show', ['receiver_id' => $request->receiver_id]);
@@ -64,9 +63,10 @@ public function sendMessageadmin(Request $request)
 
     // Simpan data ke dalam tabel pesan
     $message = Message::create($data);
-
+    event(new ChatMessageSent($message));
+    // event(new ChatMessageSent($message));
     // Broadcast event dengan data yang benar
-    broadcast(new ChatMessageSent($message))->toOthers();
+
 
     return redirect()->route('chat.showadmin', ['receiverId' => $request->receiver_id]);
 }
@@ -124,6 +124,7 @@ public function sendMessageadmin(Request $request)
                 $query->where('user_id', $userId)
                       ->where('receiver_id', Auth::id());
             })->orderBy('created_at', 'asc')->get();
+        
         }
 
         return view('chatadmin', compact('messages', 'userChats', 'selectedUser', 'receiverId'));
