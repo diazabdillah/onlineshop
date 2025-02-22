@@ -52,15 +52,15 @@ Route::match(['get', 'post'], '/botman', function() {
         $bot->ask('Boleh tau nama kamu siapa?', function(Answer $answer, $bot) {
             $name = $answer->getText();
             
-            $bot->say('Senang bertemu dengan Anda ' . $name . '!');
+            $bot->say('Senang berkenalan dengan Anda ' . $name . '!');
+            $bot->ask('Bagaimana kabar Anda hari ini ' . $name . '?', function(Answer $answer, $bot) {
+                $response = $answer->getText();
+                $bot->say('Senang mendengarnya');
+            });
             $bot->ask('Boleh minta alamat email kamu?', function(Answer $answer, $bot) {
                 $email = $answer->getText();
                 
-                $bot->say('Terima kasih! Email Anda: ' . $email);
-                $bot->ask('Bagaimana kabar Anda hari ini?', function(Answer $answer, $bot) {
-                    $response = $answer->getText();
-                    $bot->say('Senang mendengarnya! Ada yang bisa saya bantu? Ketik "Bantuan" untuk melihat menu.');
-                });
+                $bot->say('Email anda kami simpan sebagai data kami' . $email. 'Ada yang bisa saya bantu? Ketik "Bantuan" untuk melihat menu.');
             });
         });
     });
@@ -71,13 +71,15 @@ Route::match(['get', 'post'], '/botman', function() {
         1. Informasi produk </br>
         2. Cara pemesanan </br>
         3. Status pesanan</br>
+        4. Metode Pembayaran</br>
+        5. Hubungi Kami</br>
         
         Silakan ketik nomor atau menu yang Anda inginkan.');
     });
 
     // Respon untuk pilihan menu
     $botman->hears('1|Informasi produk', function(BotMan $bot) {
-        $bot->reply('Kami menyediakan berbagai produk berkualitas. Silakan kunjungi halaman produk kami di website untuk informasi lebih detail.');
+        $bot->reply('Kami menyediakan berbagai produk berkualitas. Silakan kunjungi halaman menu "produk kami" <a href="https://anekabarangsby.my.id/product">Klik di sini</a> di website untuk informasi lebih detail.');
     });
 
     $botman->hears('2|Cara pemesanan', function(BotMan $bot) {
@@ -91,9 +93,15 @@ Route::match(['get', 'post'], '/botman', function() {
     });
 
     $botman->hears('3|Status pesanan', function(BotMan $bot) {
-        $bot->reply('Untuk mengecek status pesanan, silakan login ke akun Anda dan kunjungi menu "Transaksi".');
+        $bot->reply('Untuk mengecek status pesanan, silakan login ke akun Anda dan kunjungi menu "Transaksi"<a href="https://anekabarangsby.my.id/transaction">Klik di sini</a>.');
     });
-
+    $botman->hears('4|Pilih metode pembayaran', function(BotMan $bot) {
+        $bot->reply('Kami menyediakan berbagai metode pembayaran, termasuk QRIS, semua jenis bank, dan kartu kredit.');
+    });
+    $botman->hears('5|Hubungi Kami', function(BotMan $bot) {
+        $bot->reply('Untuk hubungi kami, silakan klik link ini : <a href="https://anekabarangsby.my.id/chat">Klik di sini</a>.');
+    });
+   
     // Percakapan umum
     // $botman->hears('Gimana kabar?', function(BotMan $bot) {
     //     $bot->reply('Alhamdulillah baik! Bagaimana dengan Anda?');
