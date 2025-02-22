@@ -33,7 +33,7 @@
                                 <div class="checkout__form__input">
                                     <p>Phone Number <span>*</span></p>
                                     <input type="text" value="{{ $data['profile']->phone }}" name="phone_number" required>                                </div>
-                            </div>in
+</div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="checkout__form__input">
                                     <p>Province <span>*</span></p>
