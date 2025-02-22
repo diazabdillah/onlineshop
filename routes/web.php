@@ -15,6 +15,7 @@ use App\Http\Controllers\Frontend\TransacationController;
 use App\Http\Controllers\Midtrans\MidtransController;
 use App\Http\Controllers\Rajaongkir\RajaongkirController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\likeController;
 use App\Http\Controllers\Setting\WebconfigController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserController;
@@ -123,6 +124,7 @@ Route::match(['get', 'post'], '/botman', function() {
 //     $botman->listen();
 // });
 // ... existing code ...
+Route::get('/get-likes/{name}', [LikeController::class, 'getLikes'])->name('product.getLikes');
 Route::prefix('app')->group(function () {
     
 
@@ -186,6 +188,8 @@ Route::prefix('app')->group(function () {
 });
 
 Route::middleware('auth','role:user')->group(function(){
+   
+    Route::post('/like/{name}', [LikeController::class, 'likeProduct'])->name('product.like');
     Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
     Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');

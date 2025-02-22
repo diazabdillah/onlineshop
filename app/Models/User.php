@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Review;
+use App\Models\Like;
 use App\Models\Profile;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -51,4 +52,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class);
     }
+    public function likes()
+{
+    return $this->hasMany(Like::class);
+}
 }

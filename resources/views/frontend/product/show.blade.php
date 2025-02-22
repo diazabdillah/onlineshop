@@ -197,6 +197,7 @@
                 @slot('route', route('product.show', ['categoriSlug' => $product_related->Category->slug, 'productSlug' =>
                     $product_related->slug]))
                     @slot('name', $product_related->name)
+                    @slot('id', $product_related->id)
                     @slot('price', $product_related->price)
                     @slot('discounted_price', $product_related->discounted_price ?? null) <!-- Harga diskon -->
                     @slot('discount_percentage', $product_related->discount_percentage ?? null)

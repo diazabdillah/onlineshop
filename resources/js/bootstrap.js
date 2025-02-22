@@ -27,12 +27,14 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     key: process.env.MIX_PUSHER_APP_KEY,
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 
-
-window.Pusher = Pusher;
-
 window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: process.env.PUSHER_APP_KEY,
-    cluster: process.env.PUSHER_APP_CLUSTER,
-    forceTLS: true
+  broadcaster: 'pusher',
+  key: '20fdff21b4b7691d72c3',
+  cluster: 'ap1',
+  forceTLS: true
+});
+
+var channel = Echo.channel('my-channel');
+channel.listen('.my-event', function(data) {
+  alert(JSON.stringify(data));
 });

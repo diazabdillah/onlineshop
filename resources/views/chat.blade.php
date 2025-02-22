@@ -177,28 +177,19 @@
     </script>
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script>
-        // Initialize Pusher
-        const pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
-            cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
-            forceTLS: true
-        });
-        var channel = Echo.channel('my-channel');
-channel.listen('.my-event', function(data) {
-    const chatDiv = document.getElementById('chat');
-            const messageContainer = document.createElement('div');
-            messageContainer.classList.add('message-container');
+    import Echo from 'laravel-echo'
 
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message-content');
-            messageDiv.innerHTML = `<strong>${data.user_id == {{ auth()->id() }} ? 'You' : 'Admin'}</strong><br>${data.message}`;
-
-            messageContainer.appendChild(messageDiv);
-            chatDiv.appendChild(messageContainer);
-
-            // Scroll to the bottom
-            chatDiv.scrollTop = chatDiv.scrollHeight;
+window.Echo = new Echo({
+  broadcaster: 'pusher',
+  key: '20fdff21b4b7691d72c3',
+  cluster: 'ap1',
+  forceTLS: true
 });
-       
-    </script>
+
+var channel = Echo.channel('my-channel');
+channel.listen('.my-event', function(data) {
+  alert(JSON.stringify(data));
+});
+</script>
 </body>
 </html>

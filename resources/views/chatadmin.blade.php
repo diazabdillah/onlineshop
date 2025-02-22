@@ -205,30 +205,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.11.1/echo.iife.js"></script>
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 <script>
-    // Initialize Pusher
-    const pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
-        cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
-        forceTLS: true
-    });
+    import Echo from 'laravel-echo'
 
-    // Subscribe to the channel
-    var channel = Echo.channel('my-channel'); // Replace 'chat.1' with your actual channel name
+window.Echo = new Echo({
+  broadcaster: 'pusher',
+  key: '20fdff21b4b7691d72c3',
+  cluster: 'ap1',
+  forceTLS: true
+});
 
-    // Listen for the ChatMessageSent event
-    channel.listen('.my-event', function(data) {
-    const chatDiv = document.getElementById('chat');
-            const messageContainer = document.createElement('div');
-            messageContainer.classList.add('message-container');
-
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message-content');
-            messageDiv.innerHTML = `<strong>${data.user_id == {{ auth()->id() }} ? 'You' : 'Admin'}</strong><br>${data.message}`;
-
-            messageContainer.appendChild(messageDiv);
-            chatDiv.appendChild(messageContainer);
-
-            // Scroll to the bottom
-            chatDiv.scrollTop = chatDiv.scrollHeight;
+var channel = Echo.channel('my-channel');
+channel.listen('.my-event', function(data) {
+  alert(JSON.stringify(data));
 });
 </script>
 </body>

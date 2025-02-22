@@ -5,6 +5,7 @@ namespace App\Models\Master;
 use App\Models\Feature\Order;
 use App\Models\Feature\OrderDetail;
 use App\Models\Review;
+use App\Models\Like;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -55,4 +56,8 @@ class Product extends Model
     {
         return $this->hasMany(Review::class);
     }
+    public function likes()
+{
+    return $this->hasMany(Like::class);
+}
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Feature\Order;
+use App\Models\Master\Product;
+use App\Models\Feature\OrderDetail;
 use App\Repositories\CrudRepositories;
 use App\Services\Feature\OrderService;
 use App\Services\Midtrans\CreateSnapTokenService;
@@ -47,7 +49,18 @@ class TransacationController extends Controller
 
     public function canceled($invoice_number)
     {
-        $this->order->Query()->where('invoice_number',$invoice_number)->first()->update(['status' => 4]);
+        $order = $this->order->Query()->where('invoice_number', $invoice_number)->first();
+        $order->update(['status' => 4]);
+
+        // Assuming you have a relationship set up for order details
+        foreach ($order->orderDetail as $orderDetail) {
+            $product = Product::find($orderDetail->product_id);
+            if ($product) {
+                $product->penjualan -= $orderDetail->qty; // Decrease sales
+                $product->stok += $orderDetail->qty; // Increase stock
+                $product->save();
+            }
+        }
         return back()->with('success',__('message.order_canceled'));
     }
 }
