@@ -35,6 +35,22 @@
                                 <td>{{ __('field.description') }}</td>
                                 <td>: {!! $data['product']->description !!}</td>
                             </tr>
+                            <tr>
+                                <td>{{ __('Stok') }}</td>
+                                <td>: {{ $data['product']->stok }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ __('Kondisi') }}</td>
+                                <td>: {{ $data['product']->kondisi }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ __('Ukuran') }}</td>
+                                <td>: {{ $data['product']->ukuran }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ __('Warna') }}</td>
+                                <td>: {{ $data['product']->warna }}</td>
+                            </tr>
                         </table>
                     </div>
                     <div class="col-md-6">

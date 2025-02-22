@@ -22,8 +22,13 @@
                     <x-forms.input type="number" name="price" id="price" :label="__('field.price')" :isRequired="true" value="{{ $data['product']->price }}"/>
 
                     <x-forms.input type="number" name="weight" id="weight" :label="__('field.weight')" :isRequired="true" value="{{ $data['product']->weight }}"/>
+                    <x-forms.input type="number" name="stok" id="stok" :label="__('Stok')" :isRequired="true" value="{{ $data['product']->stok }}"/>
+                    <x-forms.input type="text" name="kondisi" id="kondisi" :label="__('Kondisi')" :isRequired="true" value="{{ $data['product']->kondisi }}"/>
+                    <x-forms.input type="text" name="ukuran" id="ukuran" :label="__('Ukuran')" :isRequired="true" value="{{ $data['product']->ukuran }}"/>
+                    <x-forms.input type="text" name="warna" id="warna" :label="__('Warna')" :isRequired="true" value="{{ $data['product']->warna }}"/>
 
-                    <x-forms.input type="textarea" name="description" id="description" :label="__('field.description')" :isRequired="true" value="{{ $data['product']->description }}"/>
+
+                    <x-forms.input type="textarea" name="description" id="description" :label="__('field.description')" :isRequired="true" value="{!! $data['product']->description !!}"/>
 
                     <x-forms.input type="file" name="thumbnails" id="thumbnails" :label="__('field.thumbnails')" hintText="Kosongkan jika tidak akan mengubah file"/>
 
