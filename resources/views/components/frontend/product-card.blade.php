@@ -29,9 +29,9 @@
             <li>
                 <a href="#" class="love-icon" 
                    onclick="likeProduct(event, '{{ $name }}')" 
-                   @guest style="pointer-events: none; opacity: 0.5;" @endguest> <!-- Disable pointer events if not logged in -->
+                   @guest style="pointer-events: none; opacity: 0.5;" @endguest>
                     <span><i class="fa fa-heart"></i></span>
-                    <span id="like-count-{{ $name }}">{{ $likes ?? 0 }}</span> <!-- Use dynamic ID for like count -->
+                    <span id="like-count-{{ $name }}">{{ $likes ?? 0 }}</span> <!-- Ensure default value is 0 -->
                 </a>
             </li>
         </ul>
@@ -83,7 +83,7 @@
 </div>
 
 <script>
-     document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         fetchLikes('{{ $name }}');
     });
 
@@ -99,11 +99,12 @@
         .then(data => {
             let likeCountElement = document.getElementById(`like-count-${name}`);
             if (likeCountElement) {
-                likeCountElement.innerText = data.like_count; // Update jumlah like
+                likeCountElement.innerText = data.like_count ?? 0; // Ensure default value is 0
             }
         })
         .catch(error => console.error('Error:', error));
     }
+
     function likeProduct(event, name) {
         event.preventDefault();
         fetch(`/like/${name}`, {
@@ -118,7 +119,7 @@
         .then(data => {
             let likeCountElement = document.getElementById(`like-count-${name}`);
             if (likeCountElement) {
-                likeCountElement.innerText = data.like_count; // Update jumlah like
+                likeCountElement.innerText = data.like_count ?? 0; // Ensure default value is 0
             }
         })
         .catch(error => console.error('Error:', error));

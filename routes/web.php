@@ -47,7 +47,7 @@ Route::match(['get', 'post'], '/botman', function() {
     $botman = app('botman');
 
     // Percakapan awal
-    $botman->hears('halo|hi|hey', function (BotMan $bot) {
+    $botman->hears('halo|hai|hi|hey|min', function (BotMan $bot) {
         $bot->reply('Halo juga! Saya adalah bot yang siap membantu Anda.');
         $bot->ask('Boleh tau nama kamu siapa?', function(Answer $answer, $bot) {
             $name = $answer->getText();
@@ -56,18 +56,18 @@ Route::match(['get', 'post'], '/botman', function() {
             $bot->ask('Bagaimana kabar Anda hari ini ' . $name . '?', function(Answer $answer, $bot) {
                 $response = $answer->getText();
                 $bot->say('Senang mendengarnya');
-            });
-            $bot->ask('Boleh minta alamat email kamu?', function(Answer $answer, $bot) {
-                $email = $answer->getText();
-                
-                $bot->say('Email anda kami simpan sebagai data kami' . $email. 'Ada yang bisa saya bantu? Ketik "Bantuan" untuk melihat menu.');
+                $bot->ask('Boleh minta alamat email kamu?', function(Answer $answer, $bot) {
+                    $email = $answer->getText();
+                    
+                    $bot->say('Email anda kami simpan sebagai data kami. </br> Ada yang bisa saya bantu? Ketik "Bantuan" untuk melihat menu.');
+                });
             });
         });
     });
 
     // Menu bantuan
     $botman->hears('Bantuan', function(BotMan $bot) {
-        $bot->reply('Berikut beberapa hal yang bisa saya bantu: 
+        $bot->reply('Berikut beberapa hal yang bisa saya bantu:</br> 
         1. Informasi produk </br>
         2. Cara pemesanan </br>
         3. Status pesanan</br>
@@ -99,7 +99,7 @@ Route::match(['get', 'post'], '/botman', function() {
         $bot->reply('Kami menyediakan berbagai metode pembayaran, termasuk QRIS, semua jenis bank, dan kartu kredit.');
     });
     $botman->hears('5|Hubungi Kami', function(BotMan $bot) {
-        $bot->reply('Untuk hubungi kami, silakan klik link ini : <a href="https://anekabarangsby.my.id/chat">Klik di sini</a>.');
+        $bot->reply('Untuk hubungi kami, silakan login ke akun Anda dan klik link ini : <a href="https://anekabarangsby.my.id/chat">Klik di sini</a>.');
     });
    
     // Percakapan umum
