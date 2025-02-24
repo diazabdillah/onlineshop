@@ -5,6 +5,9 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\Feature\OrderController;
 use App\Http\Controllers\Backend\Master\CategoryController;
 use App\Http\Controllers\Backend\Master\ProductController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\Frontend\AccountController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
@@ -137,7 +140,8 @@ Route::prefix('app')->group(function () {
     
 
     Route::middleware(['auth'])->group(function () {
-
+        Route::get('/posts/create', [PostController::class, 'createadmin'])->name('posts.create');
+        Route::post('/posts', [PostController::class, 'storeadmin'])->name('posts.store');
         Route::get('dashboard',[DashboardController::class,'index'])->name('admin.dashboard');
         Route::get('/chatadmin', [ChatController::class, 'showChatadmin'])->name('chat.showadmin');
         Route::get('/chatadmin/{receiverId}', [ChatController::class, 'showChatadmin'])->name('chat.showadmin');
@@ -196,7 +200,9 @@ Route::prefix('app')->group(function () {
 });
 
 Route::middleware('auth','role:user')->group(function(){
-   
+    Route::resource('posts', PostController::class);
+    Route::post('posts/{post}/comments', [CommentController::class, 'store']);
+    Route::post('posts/{post}/like', [LikePostController::class, 'store']);
     Route::post('/like/{name}', [LikeController::class, 'likeProduct'])->name('product.like');
     Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
     Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('chat.send');

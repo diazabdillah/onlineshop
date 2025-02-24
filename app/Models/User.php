@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Review;
 use App\Models\Like;
+use App\Models\LikePost;
 use App\Models\Profile;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -56,4 +57,8 @@ class User extends Authenticatable
 {
     return $this->hasMany(Like::class);
 }
+public function likepost()
+    {
+        return $this->hasMany(LikePost::class);
+    }
 }
