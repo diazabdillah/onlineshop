@@ -30,37 +30,27 @@
                                     value="{{ $profile->last_name }}" required>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="checkout__form__input">
-                                    <p>Province <span>*</span></p>
-                                    <select name="province" id="province_id" class="select-2" required>
-                                        <option selected value="{{$profile->province}}">{{$profile->province}}</option> 
-                                        @foreach ($data['provinces'] as $province)
-                                            <option value="{{ $province['province'] }}" data-id="{{ $province['province_id'] }}">{{ $province['province'] }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="checkout__form__input">
-                                    <p>City <span>*</span></p>
-                                    <select name="city" id="city_id" class="select-2" disabled required>
-                                        <option value="" selected disabled>-- Select City --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <input class="form-control" type="text" name="id_province" id="id_province" required>
-                            <input class="form-control" type="text" name="id_city" id="id_city" required>
-                            {{-- <div>
-                                <label class="labels" for="province">Provinsi:</label>
-                                <input class="form-control" type="text" name="province" id="province"
-                                    value="{{ $profile->province }}" required>
-                            </div>
-                            <div>
-                                <label class="labels" for="city">Kota:</label>
-                                <input class="form-control" type="text" name="city" id="city"
-                                    value="{{ $profile->city }}" required>
-                            </div> --}}
+    <div class="checkout__form__input">
+        <label for="province_id">Province <span>*</span></label>
+        <select name="province" id="province_id" class="form-control select-2" required>
+            <option selected value="{{$profile->province}}">{{$profile->province}}</option>
+            @foreach ($data['provinces'] as $province)
+                <option value="{{ $province['province'] }}" data-id="{{ $province['province_id'] }}">{{ $province['province'] }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="checkout__form__input">
+        <label for="city_id">City <span>*</span></label>
+        <select name="city" id="city_id" class="form-control select-2" disabled required>
+            <option selected value="{{$profile->city}}">{{$profile->city}}</option>
+        </select>
+    </div>
+</div>
+                            <input class="form-control" type="text" name="id_province" value="{{$profile->id_province}}" id="id_province" required>
+                            <input class="form-control" type="text" name="id_city" value="{{$profile->id_city}}" id="id_city" required>
+                            
                             <div>
                                 <label class="labels" for="phone">Telepon:</label>
                                 <input class="form-control" type="text" name="phone" id="phone"
@@ -69,6 +59,19 @@
                             <div>
                                 <label class="labels" for="address">Alamat:</label>
                                 <textarea class="form-control" name="address" id="address" rows="5" style="height: 150px;" required>{{ $profile->address }}</textarea>
+                            </div>
+                            <div>
+                                <label class="labels" for="bank_account">Nomor Rekening:</label>
+                                <input class="form-control" type="text" name="bank_account" id="bank_account" value="{{ $profile->bank_account ?? '' }}" required>
+                            </div>
+                            <div>
+                                <label class="labels" for="bank_book_image">Gambar Buku Rekening:</label>
+                                <input class="form-control" type="file" name="bank_book_image" id="bank_book_image" accept="image/*">
+                            </div>
+                            <div>
+                                @if($profile->bank_book_image)
+                                    <img src="{{ asset('storage/' . $profile->bank_book_image) }}" class="img-fluid mt-2" width="150px">
+                                @endif
                             </div>
                             <div>
                                 <button class="btn btn-primary profile-button mt-2" type="submit">Simpan</button>
@@ -82,7 +85,7 @@
                             <h4 class="text-right">Account Setting</h4>
                         </div>
                        
-                        <form action="{{ route('account.profiles.updateaccount') }}" method="POST">
+                        <<form action="{{ route('account.profiles.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div>
@@ -122,36 +125,36 @@
     @push('js')
     <script>
    
-        $('#province_id').on('change', function() {
-            var provinceId = $('#province_id option:selected').data('id');
-            $('#id_province').val(provinceId);
-            $('#city_id').empty();
-            $('#city_id').append('<option value="">-- Loading Data --</option>');
-            $.ajax({
-                url: '/rajaongkir/province/' + provinceId,
-                type: "GET",
-                dataType: "json",
-                success: function(data) {
-                    console.log(data);
-                    if (data) {
-                        $('#city_id').empty();
-                        $('#city_id').removeAttr('disabled');
-                        $('select[name="city"]').append(
-                            'option value="" selected>-- Select City --</option>');
-                        $.each(data, function(key, city) {
-                            $('select[name="city"]').append('<option value="' + city
-                                .city_name + '" data-id="'+city.city_id+'">' + city.type + ' ' + city.city_name +
-                                '</option>');
-                          
-                            });
-                            console.log($data.results);
-                            $('#id_city').val(data[0].city_id);
-                    } else {
-                        $('#city_id').empty();
-                    }
-                }
-            });
-        });
+   $('#province_id').on('change', function() {
+    var provinceId = $('#province_id option:selected').data('id');
+    $('#id_province').val(provinceId);
+    $('#city_id').empty().append('<option value="">-- Loading Data --</option>').prop('disabled', true);
+    
+    $.ajax({
+        url: '/rajaongkir/province/' + provinceId,
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            console.log(response);
+            if (response) {
+                $('#city_id').empty().append('<option value="" selected>-- Select City --</option>').prop('disabled', false);
+                $.each(response, function(key, city) {
+                    $('#city_id').append('<option value="' + city.city_name + '" data-id="' + city.city_id + '">' + city.type + ' ' + city.city_name + '</option>');
+                });
+            }
+        }
+    });
+});
+
+$('#city_id').on('change', function() {
+    var cityId = $('#city_id option:selected').data('id');
+    $('#id_city').val(cityId);
+});
+
+        // $('#city_id').on('change', function() {
+        //     var cityId = $('#city_id option:selected').data('id');
+        //     $('#id_city').val(cityId); // Set the id_city input value
+        // });
 
        
         // $(document).ready(function() {

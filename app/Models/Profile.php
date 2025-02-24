@@ -16,8 +16,12 @@ class Profile extends Model
         'last_name',
         'province',
         'city',
+        'id_city',
+        'id_province',
         'phone',
         'address',
+        'bank_account',
+        'bank_book_image',
     ];
 
     // Relasi ke model User

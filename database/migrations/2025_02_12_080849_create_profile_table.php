@@ -18,7 +18,11 @@ class CreateProfileTable extends Migration
             $table->unsignedBigInteger('user_id'); // Foreign key untuk users
             $table->string('first_name');
             $table->string('last_name');
+            $table->integer('id_city');
+            $table->integer('id_province');
             $table->string('province');
+            $table->string('bank_account');
+            $table->string('bank_book_image');
             $table->string('city');
             $table->string('phone');
             $table->text('address');
