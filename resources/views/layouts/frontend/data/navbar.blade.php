@@ -31,7 +31,7 @@
                          <li class="{{ request()->is('product*') ? 'active' : '' }}"><a href="{{ route('product.index') }}">Shop</a></li>
                          <li class="{{ request()->is('transaction*') ? 'active' : '' }}"><a href="{{ route('transaction.index') }}">Transaction</a></li>
                          <li class="{{ request()->is('chat*') ? 'active' : '' }}"><a href="{{ route('chat.show') }}">Chat Admin</a></li>
-                         <li class="{{ request()->is('category*') ? 'active' : '' }}"><a href="{{ route('category.index') }}">Category</a></li>
+                         {{-- <li class="{{ request()->is('category*') ? 'active' : '' }}"><a href="{{ route('category.index') }}">Category</a></li> --}}
                          <li><a href="/contact">Contact</a></li>
                          @auth
                           <li class="{{ request()->is('category*') ? 'active' : '' }}"><a href="#"><i class="fa fa-angle-down"></i> {{ auth()->user()->name }}</a>
