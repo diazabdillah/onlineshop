@@ -31,7 +31,7 @@
                    onclick="likeProduct(event, '{{ $name }}')" 
                    @guest style="pointer-events: none; opacity: 0.5;" @endguest>
                     <span><i class="fa fa-heart"></i></span>
-                    <span id="like-count-{{ $name }}">{{ $likes ?? 0 }}</span> <!-- Ensure default value is 0 -->
+                    <span id="like-count-{{ $name }}"></span> <!-- Ensure default value is 0 -->
                 </a>
             </li>
         </ul>

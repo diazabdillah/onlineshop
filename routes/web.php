@@ -204,6 +204,7 @@ Route::middleware('auth','role:user')->group(function(){
     Route::post('posts/{post}/comments', [CommentController::class, 'store']);
     Route::post('posts/{post}/like', [LikePostController::class, 'store']);
     Route::post('/like/{name}', [LikeController::class, 'likeProduct'])->name('product.like');
+    Route::get('/get-likes/{name}', [LikeController::class, 'getLikes']);
     Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
     Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');

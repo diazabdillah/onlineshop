@@ -71,6 +71,7 @@
                                     @slot('discounted_price', $product->discounted_price ?? null) <!-- Harga diskon -->
                                     @slot('discount_percentage', $product->discount_percentage ?? null)
                                     @slot('stok', $product->stok)
+                                    @slot('likes', $product->likes)
                                     @slot('penjualan', $product->penjualan)
                                     @endcomponent
                             </div>
