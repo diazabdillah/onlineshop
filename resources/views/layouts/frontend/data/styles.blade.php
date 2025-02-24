@@ -112,4 +112,10 @@ rel="stylesheet">
     cursor: pointer;
     border: solid 1px #BA68C8
 }
+@media (max-width: 768px) {
+        .botman-widget {
+            width: 90% !important; /* Mengatur lebar widget */
+            height: 500px !important; /* Mengatur tinggi widget */
+        }
+    }
 </style>

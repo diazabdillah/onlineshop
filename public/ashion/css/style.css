@@ -1070,9 +1070,10 @@ ol {
 
 
 .title-logo {
-	font-family: "Cookie", cursive;
+	font-family: "serif", cursive;
 	color: #111111;
-	margin-bottom: 5px;
+	margin-top: 15px;
+    font-size: xx-large;
 }
 
 .categories__text h4 {

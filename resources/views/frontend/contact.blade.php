@@ -15,20 +15,20 @@
                                 <div class="contact-wrap w-100 p-md-5 p-4">
                                     <h3 class="mb-4">Contact Us</h3>
                                     <div id="form-message-warning" class="mb-4"></div>
-                                    <div id="form-message-success" class="mb-4">
+                                    <div id="form-message-success" style="margin-top: 80px;">
                                       <p>Selamat Datang di toko kami🙏💓. <br>
 										🏠Disini anekabarangsby,Ada yang bisa kami bantu?<br>
-										🏠Ada yang ditanyakan terkait produk kami silahkan Whatsapp / Email kami.<br>
+										🏠Ada yang ditanyakan terkait produk atau ada kendala website kami silahkan Whatsapp / Chat Admin.<br>
 										🚛Pengiriman JNE, POS Indonesia, dan Tiki cepat kirim.<br>
 										🗣Pelayanan jam 8.00-jam 21.00.<br>
 										📦Pengiriman Barang Senin-Minggu di jam 16:30.<br>
 										🎟Dapetin kode voucher diskon.<br>
-										🎁Produk kosong di hubungi melalui Whatsapp.<br>
-										🍦Barang wajib pakai packing luar jawa timur.<br>
+										🎁Produk kosong di hubungi melalui Whatsapp / Chat Admin.<br>
+										🍦Pembayaran toko kami dapat berbagai macam bank, qris, debit dan kartu kredit.<br>
 										🛍Selamat Berbelanja,<br>
 										Terima Kasih Pelanggan🙋</p>
                                     </div>
-                                    <form method="POST" action="#" id="contactForm" name="contactForm" class="contactForm">
+                                    {{-- <form method="POST" action="#" id="contactForm" name="contactForm" class="contactForm">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -64,10 +64,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </form> --}}
                                 </div>
                             </div>
-                            <div class="col-md-5 d-flex align-items-stretch" style="margin-top:150px;">
+                            <div class="col-md-5 d-flex align-items-stretch" style="margin-top:80px;">
                                 <iframe
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d247.34847259330508!2d112.8139090859351!3d-7.289035619941893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7f09c3191c0ff%3A0x48a5b7a4eaf53bc9!2sJl.%20Sukolilo%20Damai%20II%20No.6%2C%20Keputih%2C%20Kec.%20Sukolilo%2C%20Surabaya%2C%20Jawa%20Timur%2060111!5e0!3m2!1sid!2sid!4v1739290634294!5m2!1sid!2sid"
                                     width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"

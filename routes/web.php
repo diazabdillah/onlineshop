@@ -18,7 +18,7 @@ use App\Http\Controllers\Frontend\TransacationController;
 use App\Http\Controllers\Midtrans\MidtransController;
 use App\Http\Controllers\Rajaongkir\RajaongkirController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\likeController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\Setting\WebconfigController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserController;
@@ -75,7 +75,8 @@ Route::match(['get', 'post'], '/botman', function() {
         2. Cara pemesanan </br>
         3. Status pesanan</br>
         4. Metode Pembayaran</br>
-        5. Hubungi Kami</br>
+        5. Metode Pengiriman</br>
+        6. Hubungi Kami</br>
         
         Silakan ketik nomor atau menu yang Anda inginkan.');
     });
@@ -91,20 +92,22 @@ Route::match(['get', 'post'], '/botman', function() {
         2. Masukkan ke keranjang
         3. Klik checkout
         4. Isi data pengiriman
-        5. Pilih metode pembayaran
+        5. Metode pembayaran
         6. Selesaikan pembayaran');
     });
 
     $botman->hears('3|Status pesanan', function(BotMan $bot) {
-        $bot->reply('Untuk mengecek status pesanan, silakan login ke akun Anda dan kunjungi menu "Transaksi"<a href="https://anekabarangsby.my.id/transaction">Klik di sini</a>.');
+        $bot->reply('Untuk mengecek status pesanan, silakan login ke akun Anda dan kunjungi menu "Transaksi"<a href="https://anekabarangsby.my.id/transaction">https://anekabarangsby.my.id/transaction</a>.');
     });
-    $botman->hears('4|Pilih metode pembayaran', function(BotMan $bot) {
+    $botman->hears('4|Metode pembayaran', function(BotMan $bot) {
         $bot->reply('Kami menyediakan berbagai metode pembayaran, termasuk QRIS, semua jenis bank, dan kartu kredit.');
     });
-    $botman->hears('5|Hubungi Kami', function(BotMan $bot) {
-        $bot->reply('Untuk hubungi kami, silakan login ke akun Anda dan klik link ini : <a href="https://anekabarangsby.my.id/chat">Klik di sini</a>.');
+    $botman->hears('5|Metode Pengiriman', function(BotMan $bot) {
+        $bot->reply('Kami menyediakan berbagai metode pengiriman, seperti Tiki, Pos Indonesia dan JNE.');
     });
-   
+    $botman->hears('6|Hubungi Kami', function(BotMan $bot) {
+        $bot->reply('Untuk hubungi kami, silakan login ke akun Anda dan kunjungi menu "Chat". Berikut link: <a href="https://anekabarangsby.my.id/chat">Klik di sini</a>.');
+    });
     // Percakapan umum
     // $botman->hears('Gimana kabar?', function(BotMan $bot) {
     //     $bot->reply('Alhamdulillah baik! Bagaimana dengan Anda?');
@@ -204,6 +207,7 @@ Route::middleware('auth','role:user')->group(function(){
     Route::post('posts/{post}/comments', [CommentController::class, 'store']);
     Route::post('posts/{post}/like', [LikePostController::class, 'store']);
     Route::post('/like/{name}', [LikeController::class, 'likeProduct'])->name('product.like');
+    Route::get('/get-likes/{name}', [LikeController::class, 'getLikes']);
     Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
     Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');
