@@ -16,7 +16,7 @@
                             <h4 class="text-right">Profile Setting</h4>
                         </div>
                        
-                        <form action="{{ route('account.profiles.update') }}" method="POST">
+                        <form action="{{ route('account.profiles.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div>
@@ -48,8 +48,8 @@
         </select>
     </div>
 </div>
-                            <input class="form-control" type="text" name="id_province" value="{{$profile->id_province}}" id="id_province" required>
-                            <input class="form-control" type="text" name="id_city" value="{{$profile->id_city}}" id="id_city" required>
+                            <input class="form-control" type="hidden" name="id_province" value="{{$profile->id_province}}" id="id_province" required>
+                            <input class="form-control" type="hidden" name="id_city" value="{{$profile->id_city}}" id="id_city" required>
                             
                             <div>
                                 <label class="labels" for="phone">Telepon:</label>
@@ -70,8 +70,10 @@
                             </div>
                             <div>
                                 @if($profile->bank_book_image)
-                                    <img src="{{ asset('storage/' . $profile->bank_book_image) }}" class="img-fluid mt-2" width="150px">
-                                @endif
+                                <img src="{{ asset('storage/' . $profile->bank_book_image) }}" class="img-fluid mt-2" width="150px">
+                            @else
+                                <p class="text-danger">Gambar buku rekening tidak tersedia.</p>
+                            @endif
                             </div>
                             <div>
                                 <button class="btn btn-primary profile-button mt-2" type="submit">Simpan</button>

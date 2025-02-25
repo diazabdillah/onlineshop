@@ -5,17 +5,37 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6 p-0">
-                    <div class="categories__item categories__large__item set-bg"
-                        data-setbg="{{ asset('me') }}/img/banner.jpg">
-                        {{-- <video width="320" height="240" controls>
-                            <source src="{{ asset('me') }}/img/banner.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video> --}}
-                        <div class="categories__text">
-                            <p style="color:white;">Beragam Produk Mulai Dari Tshirt, Hoddie, Skincare, Software Aplikasi dan Frozen Food Semuanya Tersedia Di Anekabarangsby
-                                Store.</p>
-                            <a href="/product">Jelajahi Sekarang</a>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="categories__item categories__large__item set-bg"
+                                    data-setbg="{{ asset('me') }}/img/banner.jpg">
+                                    <div class="categories__text">
+                                        <p class="justify-content-center" style="color:white;">Beragam Produk Mulai Dari Tshirt, Hoddie, Skincare, Software Aplikasi dan Frozen Food Semuanya Tersedia Di Anekabarangsby
+                                            Store.</p>
+                                        <a class="text-center" style="justify-content: center;" href="/product">Jelajahi Sekarang</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="categories__item categories__large__item set-bg"
+                                    data-setbg="{{ asset('me') }}/img/banner2.jpg">
+                                    <div class="categories__text">
+                                        <p style="color:white;">Deskripsi untuk gambar kedua.</p>
+                                        <a href="/product">Jelajahi Sekarang</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Tambahkan lebih banyak item carousel sesuai kebutuhan -->
                         </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
                 </div>
                 <div class="col-lg-6">

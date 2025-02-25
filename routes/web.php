@@ -208,15 +208,18 @@ Route::middleware('auth','role:user')->group(function(){
     Route::post('posts/{post}/like', [LikePostController::class, 'store']);
     Route::post('/like/{name}', [LikeController::class, 'likeProduct'])->name('product.like');
     Route::get('/get-likes/{name}', [LikeController::class, 'getLikes']);
-    Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
+    // Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
     Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');
     Route::post('/chat/end', [ChatController::class, 'endChat'])->name('chat.end');
+    Route::get('/vouchers/list', [CheckoutController::class, 'listVouchers'])->name('vouchers.list');
+    Route::post('/vouchers/claim', [CheckoutController::class, 'claimVoucher'])->name('vouchers.claim');
+    Route::post('/vouchers/apply', [CheckoutController::class, 'applyVoucher'])->name('apply.voucher');
 
     Route::prefix('cart')->name('cart.')->group(function(){
         Route::get('/',[CartController::class,'index'])->name('index');
         Route::post('/store',[CartController::class,'store'])->name('store');
-        Route::post('/update',[CartController::class,'update'])->name('update');
+        Route::put('/update',[CartController::class,'update'])->name('update');
         Route::get('/delete/{id}',[CartController::class,'delete'])->name('delete');
     });
 
