@@ -33,42 +33,42 @@ class AccountController extends Controller
    
         return view('frontend.account', compact('profile','data'));
     }
-  // ... existing code ...
-  public function update(Request $request)
-  {
-      $request->validate([
-          'first_name' => 'required',
-          'last_name' => 'required',
-          'province' => 'required',
-          'city' => 'required',
-          'phone' => 'required',
-          'address' => 'required',
-          'bank_account' => 'required|string', // Added validation for bank account
-          'bank_book_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Added validation for bank book image
-      ]);
+ // ... existing code ...
+ public function update(Request $request)
+ {
+     $request->validate([
+         'first_name' => 'required',
+         'last_name' => 'required',
+         'province' => 'required',
+         'city' => 'required',
+         'phone' => 'required',
+         'address' => 'required',
+         'bank_account' => 'required|string', // Added validation for bank account
+         'bank_book_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Added validation for bank book image
+     ]);
 
-      $profile = Profile::where('user_id', Auth::id())->first(); // Mencari profil berdasarkan user_id
-      if ($profile) {
-          $profile->update($request->except('bank_book_image')); // Update profile without bank_book_image
-          if ($request->hasFile('bank_book_image')) {
-              $path = $request->file('bank_book_image')->store('bank_books', 'public');
-              $profile->bank_book_image = $path;
-          }
-          $profile->bank_account = $request->bank_account; // Ensure bank_account is updated
-          $profile->save();
-      } else {
-          $profileData = $request->except('bank_book_image');
-          if ($request->hasFile('bank_book_image')) {
-              $path = $request->file('bank_book_image')->store('bank_books', 'public');
-              $profileData['bank_book_image'] = $path;
-          }
-          $profileData['bank_account'] = $request->bank_account; // Ensure bank_account is included
-          $profile = new Profile($profileData);
-          $profile->user_id = Auth::id(); // Ambil ID user yang sedang login
-          $profile->save();
-      }
-      return back()->with('success', 'Profil berhasil diperbarui.');
-  }
+     $profile = Profile::where('user_id', Auth::id())->first(); // Mencari profil berdasarkan user_id
+     if ($profile) {
+         $profile->update($request->except('bank_book_image')); // Update profile without bank_book_image
+         if ($request->hasFile('bank_book_image')) {
+             $path = $request->file('bank_book_image')->store('bank_books', 'public');
+             $profile->bank_book_image = $path;
+         }
+         $profile->bank_account = $request->bank_account; // Ensure bank_account is updated
+         $profile->save();
+     } else {
+         $profileData = $request->except('bank_book_image');
+         if ($request->hasFile('bank_book_image')) {
+             $path = $request->file('bank_book_image')->store('bank_books', 'public');
+             $profileData['bank_book_image'] = $path;
+         }
+         $profileData['bank_account'] = $request->bank_account; // Ensure bank_account is included
+         $profile = new Profile($profileData);
+         $profile->user_id = Auth::id(); // Ambil ID user yang sedang login
+         $profile->save();
+     }
+     return back()->with('success', 'Profil berhasil diperbarui.');
+ }
 // ... existing code ...
     public function updateaccount(Request $request)
     {
