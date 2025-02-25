@@ -1834,8 +1834,37 @@ ol {
 	margin-left: 10px;
 	display: inline-block;
 }
-
-.quantity {
+.pro-qty {
+	display: flex;
+	align-items: center;
+}
+.pro-qty input {
+	width: 50px;
+	text-align: center;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	margin: 0 5px;
+	padding: 5px;
+}
+.btn-minus, .btn-plus {
+	background-color: #ca1515;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	font-size: 18px;
+	transition: background-color 0.3s;
+}
+.btn-minus:disabled, .btn-plus:disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+}
+.btn-minus:hover:not(:disabled), .btn-plus:hover:not(:disabled) {
+	background-color: #b00000;
+}
+/* .quantity {
 	float: left;
 	margin-right: 10px;
 	margin-bottom: 10px;
@@ -1878,7 +1907,7 @@ ol {
 	width: 84px;
 	text-align: center;
 	height: 48px;
-}
+} */
 
 .product__details__button {
 	overflow: hidden;
@@ -1925,10 +1954,10 @@ ol {
 	padding-top: 1px;
 }
 
-.product__details__button ul li a span {
+/* .product__details__button ul li a span {
 	font-size: 18px;
 	color: #666666;
-}
+} */
 
 .product__details__widget {
 	border-top: 1px solid #ebebeb;
@@ -3716,6 +3745,20 @@ ol {
 	}
 	.product__details__pic {
 		margin-bottom: 30px;
+	}
+	input[disabled] {
+		background-color: #f0f0f0; /* Warna latar belakang abu-abu */
+		color: #a0a0a0; /* Warna teks abu-abu */
+		cursor: not-allowed; /* Menampilkan kursor tidak diizinkan */
+		border: 1px solid #d0d0d0; /* Border abu-abu */
+	}
+	
+	/* CSS untuk input yang aktif */
+	input:not([disabled]) {
+		background-color: #ffffff; /* Warna latar belakang putih */
+		color: #000000; /* Warna teks hitam */
+		cursor: text; /* Menampilkan kursor teks */
+		border: 1px solid #ccc; /* Border abu-abu muda */
 	}
 	.quantity {
 		float: none;

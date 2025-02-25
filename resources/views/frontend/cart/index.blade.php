@@ -18,8 +18,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <form action="{{ route('cart.update') }}" method="post">
+                    <form action="" method="POST" class="update-cart-form">
                         @csrf
+                        @method('PUT')
                     <div class="shop__cart__table">
                         <table>
                             <thead>
@@ -79,7 +80,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="cart__btn update__btn">
-                        <button type="submit"><span class="icon_loading"></span> Update cart</button>
+                        {{-- <button type="submit"><span class="icon_loading"></span> Update cart</button> --}}
                     </form>
                     </div>
                 </div>
@@ -99,4 +100,36 @@
             </div>
         </div>
     </section>
+    <script>
+        $(document).ready(function() {
+    $('.update-cart-form').on('submit', function(e) {
+        // e.preventDefault();
+        
+        let formData = $(this).serialize();
+        
+        $.ajax({
+            url: '{{ route("cart.update") }}',
+            type: 'PUT',
+            data: formData,
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert('Cart updated successfully!');
+                    location.reload(); // Reload to reflect updated cart
+                } else {
+                    alert('Failed to update cart.');
+                }
+            },
+            error: function(xhr) {
+                alert('An error occurred while updating the cart.');
+            }
+        });
+    });
+
+    $('.update-cart-form button[type="submit"]').remove(); // Remove submit button
+});
+
+    </script>
 @endsection

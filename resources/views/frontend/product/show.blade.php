@@ -59,11 +59,13 @@
                         <div class="product__details__button">
                             <div class="quantity">
                                 <span>Jumlah:</span>
-                                <div class="pro-qty">
-                                    <input type="text" name="cart_qty" value="1">
+                                <div class="pro-qty d-flex align-items-center">
+                                    <button type="button" class="btn-minus">-</button>
+                                    <input type="number" name="cart_qty" value="1" min="1" max="{{ $data['product']->stok }}" id="cart_qty" class="mx-2 text-center" style="width: 50px;">
+                                    <button type="button" class="btn-plus">+</button>
                                 </div>
                                 <input type="hidden" name="cart_product_id" value="{{ $data['product']->id }}">
-                            </div>
+                            </div> <br>
                             <button type="submit" class="cart-btn"><span class="icon_bag_alt"></span> Tambah Ke Keranjang</button>
                         </div>
                         <div class="product__details__widget">
@@ -225,6 +227,42 @@
                 cluster: '{{ env("PUSHER_APP_CLUSTER") }}'
             }
         };
+    </script>
+    <script>
+         const stock = {{ $data['product']->stok }};
+                                const qtyInput = document.getElementById('cart_qty');
+                                const btnPlus = document.querySelector('.btn-plus');
+                                const btnMinus = document.querySelector('.btn-minus');
+
+                                function updateButtonState() {
+                                    const qtyValue = parseInt(qtyInput.value);
+                                    btnPlus.disabled = qtyValue >= stock; // Disable "+" button if qty >= stock
+                                    btnMinus.disabled = qtyValue <= 1; // Disable "-" button if qty <= 1
+                                }
+
+                                qtyInput.addEventListener('input', function() {
+                                    if (this.value > stock) {
+                                        this.value = stock; // Set to max stock if exceeded
+                                    }
+                                    updateButtonState();
+                                });
+
+                                btnPlus.addEventListener('click', function() {
+                                    if (parseInt(qtyInput.value) < stock) {
+                                        qtyInput.value = parseInt(qtyInput.value) + 1;
+                                        updateButtonState();
+                                    }
+                                });
+
+                                btnMinus.addEventListener('click', function() {
+                                    if (parseInt(qtyInput.value) > 1) {
+                                        qtyInput.value = parseInt(qtyInput.value) - 1;
+                                        updateButtonState();
+                                    }
+                                });
+
+                                // Initial button state update
+                                updateButtonState();
     </script>
     <!-- Product Details Section End -->
 @endsection

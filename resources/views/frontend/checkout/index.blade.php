@@ -23,30 +23,30 @@
                     <div class="col-lg-8 mb-4">
                         <h5>Billing detail</h5>
                         <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-lg-12">
                                 <div class="checkout__form__input">
                                     <p>Recipient Name <span>*</span></p>
                                     <input type="text" name="recipient_name" value="{{ auth()->user()->name }}" required>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-lg-12">
                                 <div class="checkout__form__input">
                                     <p>Phone Number <span>*</span></p>
-                                    <input type="text" value="{{ $data['profile']->phone }}" name="phone_number" required>                                </div>
-</div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" value="{{ $data['profile']->phone }}" name="phone_number" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
                                 <div class="checkout__form__input">
                                     <p>Province <span>*</span></p>
                                     <select name="province_id" id="province_id" class="select-2" required>
                                         <option value="" selected disabled>-- Select Province --</option>
                                         @foreach ($data['provinces'] as $province)
-                                            <option value="{{ $province['province'] }}" data-id="{{ $province['province_id'] }}">{{ $province['province'] }}
-                                            </option>
+                                            <option value="{{ $province['province'] }}" data-id="{{ $province['province_id'] }}">{{ $province['province'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-lg-6">
                                 <div class="checkout__form__input">
                                     <p>City <span>*</span></p>
                                     <select name="city_id" id="city_id" class="select-2" disabled required>
@@ -54,13 +54,13 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-lg-12">
                                 <div class="checkout__form__input">
                                     <p>Address Detail <span>*</span></p>
                                     <input type="text" value="{{$data['profile']->address}}" name="address_detail" required>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-lg-12">
                                 <div class="checkout__form__input">
                                     <p>Courier <span>*</span></p>
                                     <select name="courier" id="courier">
@@ -70,24 +70,35 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-lg-12">
                                 <div class="checkout__form__input">
                                     <p>Shipment Method <span>*</span></p>
                                     <select name="shipping_method" id="shipping_method" required>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div class="checkout__order__voucher">
-                               
-                                    <div class="checkout__form__input">
-                                    <p>Kode Voucher</p>
-                                    <input type="text" name="voucher" id="get_voucher_code" placeholder="Enter Voucher Code">
-                                  
+                            <div class="col-lg-12">
+                                <div class="checkout__form__input">
+                                    <label for="get_voucher_code">Apply Voucher</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="voucher" id="get_voucher_code" placeholder="Enter Voucher Code">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-success btn-sm" id="apply-voucher-btn">Apply</button>
+                                        </div>
                                     </div>
-                          
-                                <div id="voucher-message"></div>
-                            </div>
+                                    <div id="voucher-message"></div>
+                                </div>
+                                <div class="checkout__order__voucher">
+                                    <h5>List Voucher:</h5>
+                                    <div id="voucher-list">
+                                        @foreach ($data['vouchers'] as $voucher)
+                                            <div class="voucher-item">
+                                                {{-- <p>Kode Voucher:&nbsp; <strong>{{ $voucher->code }}</strong> - {{ $voucher->discount }}</p>
+                                                <button type="button" class="claim-voucher btn btn-primary btn-sm" data-code="{{ $voucher->code }}">Claim</button> --}}
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -108,30 +119,28 @@
                                     <li>
                                         <span class="top__text">Total Weight</span>
                                         <span class="top__text__right">{{ $data['carts']->sum('total_weight_per_product') / 1000 }} Kg</span>
-                                        <input type="hidden" name="total_weight" id="total_weight" value="{{ $data['carts']->sum('total_weight_per_product') }}">
                                     </li>
                                 </ul>
                             </div>
                             <div class="checkout__order__total">
                                 <ul>
-                                    <li>Subtotal <span>{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span>
-                                    </li>
+                                    <li>Subtotal <span>{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
                                     <li>Voucher <span id="voucher">Rp 0</span></li>
                                     <li>Shipping Cost <span id="text-cost">Rp 0</span></li>
                                     <li>Total <span id="total">{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
-                                    <input type="hidden" name="shipping_cost" id="shipping_cost" >
+                                    <input type="hidden" name="shipping_cost" id="shipping_cost">
                                     <input type="hidden" name="voucher_code" id="voucher_code" value="0">
                                 </ul>
                             </div>
-                            <button type="submit" class="site-btn">Place oder</button>
+                            <button type="submit" class="site-btn">Place order</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </section>
-    <!-- Checkout Section End -->
 @endsection
+
 @push('js')
     <script>
         function checkCost() {
@@ -227,41 +236,94 @@
         }
 
         $(document).ready(function() {
-            // ... existing code ...
-            $('#get_voucher_code').on('input', function() {
-                var voucherCode = $(this).val();
-                console.log(voucherCode);
-                if (voucherCode) {
-                    $.ajax({
-                        url: "{{ route('apply.voucher') }}",
-                        method: "POST",
-                        data: {
-                            code: voucherCode,
-                            _token: $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                console.log(response.data.discount);
-                                $('#voucher_code').val(response.data.discount);
-                                $('#voucher').text('-' + rupiah(response.data.discount));
-                                countCost(parseInt($('#shipping_cost').val())); // Panggil countCost untuk memperbarui total
-                            } else {
-                                $('#voucher_code').val(0);
-                                $('#voucher').text(rupiah(0));
-                                $('#voucher-message').html('<p style="color: red;">' + response.data.discount + '</p>');
-                            }
-                        },
-                        error: function(xhr) {
-                            let errorMessage = xhr.responseJSON.message || 'An error occurred.';
-                            $('#voucher-message').html('<p style="color: red;">' + errorMessage + '</p>');
-                        }
-                    });
-                } else {
-                    $('#voucher-message').html('<p style="color: red;">Voucher code cannot be empty.</p>'); // Menampilkan pesan jika input kosong
-                    $('#voucher').text(rupiah(0));
-                    $('#voucher_code').val(0);
-                }
-            });
+    // Ambil daftar voucher
+    function fetchVouchers() {
+        $.ajax({
+            url: "{{ route('vouchers.list') }}",
+            method: "GET",
+            success: function(response) {
+                let voucherList = "";
+                response.vouchers.forEach(voucher => {
+                    voucherList += `<li>Kode Voucher:<span> ${voucher.code} </span>- ${rupiah(voucher.discount)} <button class="claim-voucher btn btn-primary btn-sm" data-code="${voucher.code}">Claim Voucher</button></li>`;
+                });
+                $('#voucher-list').html(voucherList);
+            }
         });
+    }
+    fetchVouchers();
+    
+    // Klaim Voucher
+    $(document).on('click', '.claim-voucher', function() {
+        let voucherCode = $(this).data('code');
+        $.ajax({
+            url: "{{ route('vouchers.claim') }}",
+            method: "POST",
+            data: {
+                code: voucherCode,
+                total: parseInt($('#total').text().replace(/[^0-9]/g, '')) || 0, // Mengambil total belanja
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.message) {
+                    alert(response.message); // Menampilkan pesan dari server
+                    $('#get_voucher_code').val(voucherCode);
+                    applyVoucher(voucherCode); // Terapkan voucher setelah klaim berhasil
+                }
+            },
+            error: function(xhr) {
+                alert('Gagal klaim voucher: ' + xhr.responseJSON.message); // Menampilkan pesan kesalahan
+            }
+        });
+    });
+
+    // Terapkan Voucher
+    function applyVoucher(voucherCode) {
+        var totalBelanja = parseInt($('#total').text().replace(/[^0-9]/g, '')) || 0;
+        $.ajax({
+            url: "{{ route('apply.voucher') }}",
+            method: "POST",
+            data: {
+                code: voucherCode,
+                total: totalBelanja,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    let discount = response.data.discount;
+                    let totalAkhir = totalBelanja - discount;
+                    $('#voucher_code').val(discount);
+                    $('#voucher').text('-' + rupiah(discount));
+                    $('#total').text(rupiah(totalAkhir));
+                    $('#voucher-message').html('<p style="color: green;">Voucher berhasil diterapkan!</p>');
+                } else {
+                    resetVoucher();
+                    $('#voucher-message').html('<p style="color: red;">' + response.message + '</p>');
+                }
+            },
+            error: function(xhr) {
+                resetVoucher();
+                $('#voucher-message').html('<p style="color: red;">Voucher tidak valid</p>');
+            }
+        });
+    }
+
+    function resetVoucher() {
+        $('#voucher').text(rupiah(0));
+        $('#voucher_code').val(0);
+    }
+
+    $('#apply-voucher-btn').on('click', function(e) {
+        e.preventDefault();
+        let voucherCode = $('#get_voucher_code').val();
+        if (voucherCode) {
+            applyVoucher(voucherCode);
+        } else {
+            resetVoucher();
+            $('#voucher-message').html('<p style="color: red;">Kode voucher tidak boleh kosong.</p>');
+        }
+    });
+});
+  
+
     </script>
 @endpush
