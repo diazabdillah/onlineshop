@@ -1,5 +1,29 @@
 @extends('layouts.frontend.app')
 @section('content')
+<style>
+    .pro-qty {
+    display: inline-flex;
+    align-items: center;
+}
+
+.pro-qty .qtybtn {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+}
+
+.pro-qty .qtybtn:hover {
+    background-color: #e8e8e8;
+}
+
+.pro-qty input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+}
+</style>
     <!-- Breadcrumb Begin -->
     <div class="breadcrumb-option">
         <div class="container">
@@ -18,9 +42,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <form action="" method="POST" class="update-cart-form">
+                    <form action="" method="post">
                         @csrf
-                        @method('PUT')
                     <div class="shop__cart__table">
                         <table>
                             <thead>
@@ -60,7 +83,9 @@
                                         <input type="hidden" name="cart_id[]" value="{{ $carts->id }}">
                                         <td class="cart__quantity">
                                             <div class="pro-qty">
+                                                <span class="qtybtn">-</span>
                                                 <input type="text" value="{{ $carts->qty }}" name="cart_qty[]">
+                                                <span class="qtybtn">+</span>
                                             </div>
                                         </td>
                                         <td class="cart__total">{{ rupiah($carts->total_price_per_product) }}</td>
@@ -79,10 +104,10 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="cart__btn update__btn">
-                        {{-- <button type="submit"><span class="icon_loading"></span> Update cart</button> --}}
+                    {{-- <div class="cart__btn update__btn">
+                        <button type="submit"><span class="icon_loading"></span> Update cart</button> --}}
                     </form>
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
             <div class="row">
@@ -100,36 +125,54 @@
             </div>
         </div>
     </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-    $('.update-cart-form').on('submit', function(e) {
-        // e.preventDefault();
-        
-        let formData = $(this).serialize();
-        
-        $.ajax({
-            url: '{{ route("cart.update") }}',
-            type: 'PUT',
-            data: formData,
-            headers: {
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-            },
-            success: function(response) {
-                if (response.success) {
-                    alert('Cart updated successfully!');
-                    location.reload(); // Reload to reflect updated cart
+            $('.pro-qty').on('click', '.qtybtn', function(e) {
+                e.preventDefault();
+                var $button = $(this);
+                var $input = $button.parent().find('input');
+                var oldValue = $input.val();
+                var newVal;
+    
+                // Tambahkan kelas 'inc' pada tombol tambah
+                if ($button.hasClass('qtybtn') && $button.text() === '+') {
+                    newVal = parseFloat(oldValue) + 1;
                 } else {
-                    alert('Failed to update cart.');
+                    if (oldValue > 1) {
+                        newVal = parseFloat(oldValue) - 1;
+                    } else {
+                        newVal = 1;
+                    }
                 }
-            },
-            error: function(xhr) {
-                alert('An error occurred while updating the cart.');
-            }
-        });
-    });
-
-    $('.update-cart-form button[type="submit"]').remove(); // Remove submit button
+    
+                $input.val(newVal);
+    
+                var cartId = $input.closest('tr').find('input[name="cart_id[]"]').val();
+                var newQty = newVal;
+    
+                // Kirim permintaan AJAX untuk memperbarui kuantitas
+                $.ajax({
+    url: '/cart/update', // Ganti dengan URL yang sesuai
+    type: 'POST',
+    data: {
+        cart_id: cartId, // ID keranjang yang ingin diperbarui
+        cart_qty: newQty, // Jumlah baru yang ingin diupdate
+        _token: '{{ csrf_token() }}' // Token CSRF untuk keamanan
+    },
+    success: function(response) {
+        // Menampilkan total harga per produk dan total harga keranjang
+        //$('#totalPricePerProduct').text(response.total_price_per_product);
+        // $('#totalCartPrice').text(response.total_cart_price);
+       // alert('Keranjang berhasil diperbarui!'); // Pesan sukses
+       location.reload();
+    },
+    error: function(xhr) {
+        // Menangani kesalahan
+        alert('Terjadi kesalahan saat memperbarui keranjang: ' + xhr.responseText);
+    }
 });
-
+            });
+        });
     </script>
 @endsection

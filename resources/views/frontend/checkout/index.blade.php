@@ -123,12 +123,12 @@
                             </div>
                             <div class="checkout__order__total">
                                 <ul>
-                                    <li>Subtotal <span>{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
+                                    <li>Subtotal <span id="subtotal">{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
                                     <li>Voucher <span id="voucher">Rp 0</span></li>
                                     <li>Shipping Cost <span id="text-cost">Rp 0</span></li>
                                     <li>Total <span id="total">{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
                                     <input type="hidden" name="shipping_cost" id="shipping_cost">
-                                    <input type="text" name="voucher_code" id="voucher_code" value="0">
+                                    <input type="hidden" name="voucher_code" id="voucher_code" value="0">
                                     <input type="hidden" name="total_weight" value="{{ $data['carts']->sum('total_weight_per_product') }}">
                                 </ul>
                             </div>
@@ -292,14 +292,18 @@
             success: function(response) {
                 if (response.success) {
                     let discount = response.data.discount;
-                    // let totalAkhir = subtotal - discount;
-                    $('#voucher_code').val(discoount);
+                    $('#voucher_code').val(discount);
                     $('#voucher').text('-' + rupiah(discount));
-                    // $('#total').text(rupiah(totalAkhir));
+                    
+                    // Hitung total akhir setelah voucher diterapkan
+                    let totalAkhir = subtotal - discount; // Hitung total akhir
+                    $('#total').text(rupiah(totalAkhir));
+                   // Update total di UI
                 } else {
                     resetVoucher();
                     alert(response.message);
                 }
+               
             },
             error: function() {
                 resetVoucher();
@@ -307,14 +311,13 @@
             }
         });
     }
-
     function resetVoucher() {
-        console.log("resetVoucher dipanggil"); // Tambahkan log untuk debugging
-        $('#voucher').text(rupiah(0));
-        $('#voucher_code').val('');
-        let subtotal = parseInt($('#total').text().replace(/[^0-9]/g, '')) || 0;
-        $('#total').text(rupiah(subtotal));
-    }
+    $('#voucher').text(rupiah(0));
+    $('#voucher_code').val('');
+    let subtotal = parseInt($('#subtotal').text().replace(/[^0-9]/g, '')) || 0;
+    $('#total').text(rupiah(subtotal)); // Update total di UI ke subtotal
+    $('#shipping_cost').val(0); // Reset shipping cost jika perlu
+}
 });
 
   

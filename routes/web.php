@@ -218,11 +218,14 @@ Route::middleware('auth','role:user')->group(function(){
 
     Route::prefix('cart')->name('cart.')->group(function(){
         Route::get('/',[CartController::class,'index'])->name('index');
+        Route::get('/data',[CartController::class,'getdata']);
         Route::post('/store',[CartController::class,'store'])->name('store');
-        Route::put('/update',[CartController::class,'update'])->name('update');
+        // Route::put('/update',[CartController::class,'update'])->name('update');
         Route::get('/delete/{id}',[CartController::class,'delete'])->name('delete');
-    });
+      
 
+    });
+    Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
     Route::prefix('transaction')->name('transaction.')->group(function(){
         Route::get('/',[TransacationController::class,'index'])->name('index');
         Route::get('/{invoice_number}',[TransacationController::class,'show'])->name('show');

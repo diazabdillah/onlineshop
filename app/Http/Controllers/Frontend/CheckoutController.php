@@ -77,7 +77,6 @@ public function index()
     public function listVouchers() {
         $vouchers = Voucher::where('valid_until', '>=', now())
         ->whereColumn('used_count', '<', 'usage_limit')
-        // Menghapus kondisi untuk mengecualikan voucher yang sudah diklaim
         ->get();
 
         return response()->json(['vouchers' => $vouchers]);

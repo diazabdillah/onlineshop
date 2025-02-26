@@ -57,4 +57,17 @@ class CartController extends Controller
             dd($th);
         }
     }
+    public function updateCart(Request $request)
+{
+    $cart = Cart::find($request->cart_id);
+    $cart->qty = $request->cart_qty;
+    $cart->save();
+
+    //$totalPricePerProduct = $cart->qty * $cart->product->price;
+    // $totalCartPrice = Cart::where('user_id', auth()->user()->id)->sum($totalPricePerProduct);
+
+    return response()->json([ // Mengembalikan response JSON
+       'message' => 'Sukses tambah data cart'
+    ]);
+}
 }
