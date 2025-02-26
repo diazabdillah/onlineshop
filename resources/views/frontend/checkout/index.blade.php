@@ -78,7 +78,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-12">
-                                <div class="checkout__form__input">
+                                <!-- <div class="checkout__form__input">
                                     <label for="get_voucher_code">Apply Voucher</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="voucher" id="get_voucher_code" placeholder="Enter Voucher Code">
@@ -87,14 +87,13 @@
                                         </div>
                                     </div>
                                     <div id="voucher-message"></div>
-                                </div>
+                                </div> -->
                                 <div class="checkout__order__voucher">
                                     <h5>List Voucher:</h5>
                                     <div id="voucher-list">
                                         @foreach ($data['vouchers'] as $voucher)
                                             <div class="voucher-item">
-                                                {{-- <p>Kode Voucher:&nbsp; <strong>{{ $voucher->code }}</strong> - {{ $voucher->discount }}</p>
-                                                <button type="button" class="claim-voucher btn btn-primary btn-sm" data-code="{{ $voucher->code }}">Claim</button> --}}
+                                               
                                             </div>
                                         @endforeach
                                     </div>
@@ -129,7 +128,8 @@
                                     <li>Shipping Cost <span id="text-cost">Rp 0</span></li>
                                     <li>Total <span id="total">{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li>
                                     <input type="hidden" name="shipping_cost" id="shipping_cost">
-                                    <input type="hidden" name="voucher_code" id="voucher_code" value="0">
+                                    <input type="text" name="voucher_code" id="voucher_code" value="0">
+                                    <input type="hidden" name="total_weight" value="{{ $data['carts']->sum('total_weight_per_product') }}">
                                 </ul>
                             </div>
                             <button type="submit" class="site-btn">Place order</button>
@@ -232,11 +232,11 @@
             var total = parseInt(subtotal) + ongkir - discount; // Kurangi total dengan diskon
             $('#text-cost').text(rupiah(ongkir));
             $('#shipping_cost').val(ongkir);
+            $('#shipping_cost').val(ongkir);
             $('#total').text(rupiah(total));
         }
 
         $(document).ready(function() {
-    // Ambil daftar voucher
     function fetchVouchers() {
         $.ajax({
             url: "{{ route('vouchers.list') }}",
@@ -244,85 +244,79 @@
             success: function(response) {
                 let voucherList = "";
                 response.vouchers.forEach(voucher => {
-                    voucherList += `<li>Kode Voucher:<span> ${voucher.code} </span>- ${rupiah(voucher.discount)} <button class="claim-voucher btn btn-primary btn-sm" data-code="${voucher.code}">Claim Voucher</button></li>`;
+                    let discountText = voucher.type === 'percentage' 
+                        ? `${voucher.discount}%` 
+                        : rupiah(voucher.discount);
+                    voucherList += `<div class="card mb-3 voucher-card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-2 border-right">
+                                    <i class="fa fa-ticket fa-2x text-primary"></i>
+                                </div>
+                                <div class="col-7">
+                                    <h6 class="card-title mb-1">Diskon ${discountText} S/& ${rupiah(voucher.max_discount)}</h6>
+                                    <p class="card-text mb-0">
+                                        <span class="text-danger font-weight-bold">Kode: ${voucher.code}</span>
+                                    </p>
+                                    <small class="text-muted">Min. belanja ${rupiah(voucher.min_purchase)}</small>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <input type="radio" name="selected_voucher" value="${voucher.code}" class="voucher-radio" data-code="${voucher.code}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
                 });
                 $('#voucher-list').html(voucherList);
             }
         });
     }
     fetchVouchers();
-    
-    // Klaim Voucher
-    $(document).on('click', '.claim-voucher', function() {
-        let voucherCode = $(this).data('code');
-        $.ajax({
-            url: "{{ route('vouchers.claim') }}",
-            method: "POST",
-            data: {
-                code: voucherCode,
-                total: parseInt($('#total').text().replace(/[^0-9]/g, '')) || 0, // Mengambil total belanja
-                _token: $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                if (response.message) {
-                    alert(response.message); // Menampilkan pesan dari server
-                    $('#get_voucher_code').val(voucherCode);
-                    applyVoucher(voucherCode); // Terapkan voucher setelah klaim berhasil
-                }
-            },
-            error: function(xhr) {
-                alert('Gagal klaim voucher: ' + xhr.responseJSON.message); // Menampilkan pesan kesalahan
-            }
-        });
+
+    $(document).on('change', '.voucher-radio', function() {
+        resetVoucher(); // Reset diskon sebelum menerapkan voucher baru
+        let voucherCode = $(this).val();
+        applyVoucher(voucherCode);
     });
 
-    // Terapkan Voucher
     function applyVoucher(voucherCode) {
-        var totalBelanja = parseInt($('#total').text().replace(/[^0-9]/g, '')) || 0;
+        let subtotal = parseInt($('#total').text().replace(/[^0-9]/g, '')) || 0;
         $.ajax({
             url: "{{ route('apply.voucher') }}",
             method: "POST",
             data: {
                 code: voucherCode,
-                total: totalBelanja,
+                total: subtotal,
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
                 if (response.success) {
                     let discount = response.data.discount;
-                    let totalAkhir = totalBelanja - discount;
-                    $('#voucher_code').val(discount);
+                    // let totalAkhir = subtotal - discount;
+                    $('#voucher_code').val(discoount);
                     $('#voucher').text('-' + rupiah(discount));
-                    $('#total').text(rupiah(totalAkhir));
-                    $('#voucher-message').html('<p style="color: green;">Voucher berhasil diterapkan!</p>');
+                    // $('#total').text(rupiah(totalAkhir));
                 } else {
                     resetVoucher();
-                    $('#voucher-message').html('<p style="color: red;">' + response.message + '</p>');
+                    alert(response.message);
                 }
             },
-            error: function(xhr) {
+            error: function() {
                 resetVoucher();
-                $('#voucher-message').html('<p style="color: red;">Voucher tidak valid</p>');
+                alert('Voucher tidak valid');
             }
         });
     }
 
     function resetVoucher() {
+        console.log("resetVoucher dipanggil"); // Tambahkan log untuk debugging
         $('#voucher').text(rupiah(0));
-        $('#voucher_code').val(0);
+        $('#voucher_code').val('');
+        let subtotal = parseInt($('#total').text().replace(/[^0-9]/g, '')) || 0;
+        $('#total').text(rupiah(subtotal));
     }
-
-    $('#apply-voucher-btn').on('click', function(e) {
-        e.preventDefault();
-        let voucherCode = $('#get_voucher_code').val();
-        if (voucherCode) {
-            applyVoucher(voucherCode);
-        } else {
-            resetVoucher();
-            $('#voucher-message').html('<p style="color: red;">Kode voucher tidak boleh kosong.</p>');
-        }
-    });
 });
+
   
 
     </script>

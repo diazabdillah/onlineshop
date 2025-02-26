@@ -76,71 +76,61 @@ public function index()
     }
     public function listVouchers() {
         $vouchers = Voucher::where('valid_until', '>=', now())
-            ->whereColumn('used_count', '<', 'usage_limit')
-            ->get();
+        ->whereColumn('used_count', '<', 'usage_limit')
+        // Menghapus kondisi untuk mengecualikan voucher yang sudah diklaim
+        ->get();
 
         return response()->json(['vouchers' => $vouchers]);
     }
 
     // Klaim voucher (misalnya menyimpannya ke database pengguna jika perlu)
-    public function claimVoucher(Request $request) {
-        $request->validate([
-            'code' => 'required|exists:vouchers,code'
-        ]);
-
+    public function claimVoucher(Request $request)
+    {
         $voucher = Voucher::where('code', $request->code)->first();
-
-        if (!$voucher || !$voucher->isValid()) {
-            return response()->json(['message' => 'Voucher tidak valid atau sudah habis'], 400);
+        if (!$voucher) {
+            return response()->json(['message' => 'Voucher tidak ditemukan.'], 404);
         }
 
-        // Cek apakah voucher sudah pernah diklaim oleh pengguna
-        $existingClaim = ClaimedVoucher::where('user_id', Auth::id())
-            ->where('voucher_id', $voucher->id)
-            ->first();
-
-        if ($existingClaim) {
-            return response()->json(['message' => 'Anda sudah mengklaim voucher ini sebelumnya'], 400);
+        // Cek apakah pengguna sudah klaim sebelumnya
+        $isClaimed = UserVoucher::where('user_id', Auth::id())->where('voucher_id', $voucher->id)->exists();
+        if ($isClaimed) {
+            return response()->json(['message' => 'Anda sudah klaim voucher ini.'], 400);
         }
 
-        // Menyimpan klaim voucher ke dalam database
-        ClaimedVoucher::create([
-            'user_id' => Auth::id(), // ID pengguna yang mengklaim voucher
-            'voucher_id' => $voucher->id, // ID voucher yang diklaim
+        // Simpan klaim voucher
+        UserVoucher::create([
+            'user_id' => Auth::id(),
+            'voucher_id' => $voucher->id,
         ]);
 
-        return response()->json(['message' => 'Voucher berhasil diklaim!']);
+        return response()->json(['message' => 'Voucher berhasil diklaim.'], 200);
     }
 
-    public function applyVoucher(Request $request) {
-        $request->validate([
-            'code' => 'required|exists:vouchers,code',
-            'total' => 'required|numeric|min:1'
-        ]);
-
+    // Terapkan Voucher
+    public function applyVoucher(Request $request)
+    {
         $voucher = Voucher::where('code', $request->code)->first();
-
-        if (!$voucher || !$voucher->isValid()) {
-            return response()->json(['message' => 'Voucher tidak valid atau sudah habis'], 400);
+        if (!$voucher) {
+            return response()->json(['success' => false, 'message' => 'Voucher tidak ditemukan.']);
         }
-        $existingClaim = ClaimedVoucher::where('user_id', Auth::id())
-        ->where('voucher_id', $voucher->id)
-        ->first();
 
-    if (!$existingClaim) {
-        return response()->json(['message' => 'Anda harus mengklaim voucher ini sebelum dapat menerapkannya'], 400);
-    }
         if ($request->total < $voucher->min_purchase) {
-            return response()->json(['message' => 'Total belanja tidak memenuhi syarat voucher'], 400);
+            return response()->json(['success' => false, 'message' => 'Minimal pembelian belum terpenuhi.']);
         }
 
-        $discount = $voucher->calculateDiscount($request->total);
+        // Hitung diskon
+        if ($voucher->type === 'percentage') {
+            $discount = ($voucher->discount / 100) * $request->total;
+            if ($discount > $voucher->max_discount) {
+                $discount = $voucher->max_discount;
+            }
+        } else {
+            $discount = $voucher->discount;
+        }
+
         return response()->json([
             'success' => true,
-            'data' => [
-                'discount' => $discount,
-                'voucher_type' => $voucher->type
-            ]
+            'data' => ['discount' => $discount],
         ]);
     }
 

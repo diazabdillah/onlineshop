@@ -19,11 +19,11 @@
                             </div>
                             <div class="carousel-item">
                                 <div class="categories__item categories__large__item set-bg"
-                                    data-setbg="{{ asset('me') }}/img/banner2.jpg">
-                                    <div class="categories__text">
+                                    data-setbg="{{ asset('me') }}/img/bannerramadhan.jpg">
+                                    <!-- <div class="categories__text">
                                         <p style="color:white;">Deskripsi untuk gambar kedua.</p>
                                         <a href="/product">Jelajahi Sekarang</a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <!-- Tambahkan lebih banyak item carousel sesuai kebutuhan -->

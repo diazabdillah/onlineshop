@@ -18,6 +18,7 @@ class Voucher extends Model
         'used_count',
         'type',
         'min_purchase',
+        'max_discount', // ... existing code ...
     ];
 
     protected $dates = [
@@ -36,9 +37,14 @@ class Voucher extends Model
         $now = now();
         return $this->valid_from <= $now && $this->valid_until >= $now && ($this->usage_limit === null || $this->used_count < $this->usage_limit);
     }
+  
     public function calculateDiscount($total) {
         if ($this->type == 'percentage') {
-            return min(($total * $this->discount / 100), $total); // Maksimal diskon tidak melebihi total harga
+            $calculatedDiscount = ($total * $this->discount / 100);
+            if ($this->max_discount !== null) {
+                $calculatedDiscount = min($calculatedDiscount, $this->max_discount); // Pastikan tidak melebihi max_discount
+            }
+            return min($calculatedDiscount, $total); // Pastikan tidak melebihi total
         } else {
             return min($this->discount, $total); // Jika fixed, pastikan tidak melebihi total
         }
