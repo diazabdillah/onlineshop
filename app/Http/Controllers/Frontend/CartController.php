@@ -59,15 +59,33 @@ class CartController extends Controller
     }
     public function updateCart(Request $request)
 {
-    $cart = Cart::find($request->cart_id);
-    $cart->qty = $request->cart_qty;
-    $cart->save();
-
-    //$totalPricePerProduct = $cart->qty * $cart->product->price;
-    // $totalCartPrice = Cart::where('user_id', auth()->user()->id)->sum($totalPricePerProduct);
-
-    return response()->json([ // Mengembalikan response JSON
-       'message' => 'Sukses tambah data cart'
+    $request->validate([
+        'cart_id' => 'required|integer',
+        'cart_qty' => 'required|integer|min:1',
     ]);
+
+    // Temukan item keranjang berdasarkan ID
+    $cartItem = Cart::find($request->cart_id);
+    
+    if ($cartItem) {
+        // Perbarui kuantitas
+        $cartItem->qty = $request->cart_qty;
+        $cartItem->save();
+
+        // Hitung total harga per produk
+        $totalPricePerProduct = $cartItem->qty * $cartItem->Product->price; // Ganti dengan logika harga yang sesuai
+        if ($cartItem->Product->discounted_price) {
+            $totalPricePerProduct = $cartItem->qty * $cartItem->Product->discounted_price;
+        }
+
+        // Hitung total harga keranjang
+        $totalCartPrice = Cart::sum('total_price_per_product'); // Ganti dengan logika yang sesuai jika perlu
+
+        // Kembalikan respons JSON
+        return response()->json([
+            'total_price_per_product' => $totalPricePerProduct,
+            'total_cart_price' => $totalCartPrice,
+        ]);
+    }
 }
 }

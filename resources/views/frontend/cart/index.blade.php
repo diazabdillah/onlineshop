@@ -165,7 +165,13 @@
         //$('#totalPricePerProduct').text(response.total_price_per_product);
         // $('#totalCartPrice').text(response.total_cart_price);
        // alert('Keranjang berhasil diperbarui!'); // Pesan sukses
-       location.reload();
+    //    location.reload();
+    var totalPricePerProduct = response.total_price_per_product; // Ambil total harga per produk dari respons
+        var totalCartPrice = response.total_cart_price; // Ambil total harga keranjang dari respons
+        
+        // Update tampilan total harga per produk dan total harga keranjang
+        $input.closest('tr').find('.cart__total').text(rupiah(totalPricePerProduct));
+        $('.cart__total__procced ul li span').text(rupiah(totalCartPrice));
     },
     error: function(xhr) {
         // Menangani kesalahan
