@@ -58,34 +58,57 @@ class CartController extends Controller
         }
     }
     public function updateCart(Request $request)
-{
-    $request->validate([
-        'cart_id' => 'required|integer',
-        'cart_qty' => 'required|integer|min:1',
-    ]);
-
-    // Temukan item keranjang berdasarkan ID
-    $cartItem = Cart::find($request->cart_id);
+    {
+        $request->validate([
+            'cart_id' => 'required|integer',
+            'cart_qty' => 'required|integer|min:1',
+        ]);
     
-    if ($cartItem) {
-        // Perbarui kuantitas
-        $cartItem->qty = $request->cart_qty;
-        $cartItem->save();
-
-        // Hitung total harga per produk
-        $totalPricePerProduct = $cartItem->qty * $cartItem->Product->price; // Ganti dengan logika harga yang sesuai
-        if ($cartItem->Product->discounted_price) {
-            $totalPricePerProduct = $cartItem->qty * $cartItem->Product->discounted_price;
+        // Find the cart item by ID
+        $cartItem = Cart::find($request->cart_id);
+    
+        if ($cartItem) {
+            // Update quantity
+            $cartItem->qty = $request->cart_qty;
+            $cartItem->save();
+    
+            // Calculate total price per product based on quantity and discounted price (if any)
+            $totalPricePerProduct = $cartItem->qty * $cartItem->Product->price; // Default price logic
+            if ($cartItem->Product->discounted_price) {
+                $totalPricePerProduct = $cartItem->qty * $cartItem->Product->discounted_price;
+            }
+    
+            // Calculate the total price of the cart (across all items)
+            $totalCartPrice = 0;
+            $cartItems = Cart::all(); // Get all cart items
+            foreach ($cartItems as $item) {
+                $totalCartPrice += $item->qty * ($item->Product->discounted_price ?: $item->Product->price);
+            }
+    
+            // Return updated data to the AJAX response
+            return response()->json([
+                'total_price_per_product' => $totalPricePerProduct,
+                'total_cart_price' => $totalCartPrice,
+            ]);
         }
-
-        // Hitung total harga keranjang
-        $totalCartPrice = Cart::sum('total_price_per_product'); // Ganti dengan logika yang sesuai jika perlu
-
-        // Kembalikan respons JSON
+    
+        return response()->json(['error' => 'Cart item not found'], 404);
+    }
+    
+    public function getCartData()
+    {
+        // Assuming you want to get the cart items for a user
+        $cartItems = Cart::with('Product')->get(); // Adjust this query to filter by user if needed
+    
+        // Calculate the total cart price
+        $totalCartPrice = $cartItems->sum(function($item) {
+            return $item->qty * ($item->Product->discounted_price ?: $item->Product->price);
+        });
+    
+        // Return the data as JSON
         return response()->json([
-            'total_price_per_product' => $totalPricePerProduct,
+            'cart_items' => $cartItems,
             'total_cart_price' => $totalCartPrice,
         ]);
     }
-}
 }

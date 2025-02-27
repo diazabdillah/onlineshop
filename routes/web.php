@@ -225,6 +225,7 @@ Route::middleware('auth','role:user')->group(function(){
       
 
     });
+    Route::get('/cart/data', [CartController::class, 'getCartData'])->name('cart.data');
     Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
     Route::prefix('transaction')->name('transaction.')->group(function(){
         Route::get('/',[TransacationController::class,'index'])->name('index');
