@@ -55,9 +55,46 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <!-- Cart items will be dynamically inserted here by AJAX -->
-                                </tbody>
+                                <tbody id="cart-body">
+                                 @foreach ($data['carts'] as $carts)
+                                    <tr>
+                                        <td class="cart__product__item">
+                                            <img src="{{ asset($carts->Product->thumbnails_path) }}" alt="" width="90">
+                                            <div class="cart__product__item__title">
+                                                <h6>{{ $carts->Product->name }}</h6>
+                                                <div class="rating">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        
+                                        <td class="cart__price">
+                                            @if($carts->Product->discounted_price)
+                                                <span style="text-decoration: line-through;">{{ $carts->Product->price }}</span>
+                                                <span>{{ $carts->Product->discounted_price }}</span>
+                                            @else
+                                                <span>{{ $carts->Product->price }}</span> <!-- Harga tanpa coret untuk produk tanpa diskon -->
+                                            @endif
+                                        </td>
+                                        <input type="hidden" name="cart_id[]" value="{{ $carts->id }}">
+                                        <td class="cart__quantity">
+                                        <div class="pro-qty">
+        <button type="button" class="btn-minus">-</button>
+        <input type="number" value="{{ $carts->qty }}" name="cart_qty[]" min="1" max="{{ $carts->Product->stok }}" class="qty-input" style="width: 50px;">
+        <!-- Menghapus salah satu tombol + -->
+        <!-- <span class="inc qtybtn"></span> --> <!-- Menghapus tag HTML yang tersembunyi -->
+        <button type="button" class="btn-plus">+</button>
+    </div>
+</td>
+                                        <td class="cart__total">{{ rupiah($carts->total_price_per_product) }}</td>
+                                        <td class="cart__close"><a href="{{ route('cart.delete',$carts->id) }}"><span class="icon_close"></span></a></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                             </table>
                         </div>
                     </form>
@@ -83,7 +120,7 @@
                     <div class="cart__total__procced">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Total <span id="totalCartPrice"></span></li> <!-- This will show the total cart price -->
+                            <li>Total <span id="totalCartPrice">{{ rupiah($data['carts']->sum('total_price_per_product')) }}</span></li> <!-- This will show the total cart price -->
                         </ul>
                         <a href="{{ route('checkout.index') }}" class="primary-btn">Proceed to checkout</a>
                     </div>
@@ -94,124 +131,55 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     $(document).ready(function() {
-        $('.pro-qty').on('click', '.qtybtn', function(e) {
-            e.preventDefault();
-            var $button = $(this);
-            var $input = $button.parent().find('input');
-            var oldValue = $input.val();
-            var newVal;
-    
-            // Handle increment and decrement
-            if ($button.text() === '+') {
-                newVal = parseFloat(oldValue) + 1;
-            } else {
-                if (oldValue > 1) {
-                    newVal = parseFloat(oldValue) - 1;
-                } else {
-                    newVal = 1;
-                }
+        $('.pro-qty').on('click', '.btn-plus, .btn-minus', function(e) {
+        e.preventDefault();
+        var $button = $(this);
+        var $input = $button.siblings('.qty-input');
+        var oldValue = parseInt($input.val());
+        var maxStock = parseInt($input.attr('max'));
+        var newVal = oldValue;
+
+        if ($button.hasClass('btn-plus')) {
+            if (oldValue < maxStock) {
+                newVal = oldValue + 1;
             }
-    
-            $input.val(newVal);
-    
-            var cartId = $input.closest('tr').find('input[name="cart_id[]"]').val();
-            var newQty = newVal;
-    
-            // Send AJAX request to update the cart
-            $.ajax({
-                url: '/cart/update', // Ensure this is the correct route
-                type: 'POST',
-                data: {
-                    cart_id: cartId, // The cart item ID
-                    cart_qty: newQty, // The new quantity
-                    _token: '{{ csrf_token() }}' // CSRF token for security
-                },
-                success: function(response) {
-                    if (response.total_price_per_product && response.total_cart_price) {
-                        // Update the price per product and the total cart price
-                        var totalPricePerProduct = response.total_price_per_product; // Total price per product
-                        var totalCartPrice = response.total_cart_price; // Total price for the cart
-                        
-                        // Update the individual product total price
-                        $input.closest('tr').find('.cart__total').text(rupiah(totalPricePerProduct));
-    
-                        // Update the total price for the entire cart
-                        $('#totalCartPrice').text(rupiah(totalCartPrice));
-                    }
-                },
-                error: function(xhr) {
-                    alert('Error updating cart: ' + xhr.responseText);
-                }
-            });
-        });
+        } else if ($button.hasClass('btn-minus')) {
+            if (oldValue > 1) {
+                newVal = oldValue - 1;
+            }
+        }
+
+        $input.val(newVal);
+        updateCart($input);
     });
-    
-    // Function to format numbers into Rupiah currency format
+
+    function updateCart($input) {
+        var cartId = $input.closest('tr').find('input[name="cart_id[]"]').val();
+        var newQty = $input.val();
+
+        $.ajax({
+            url: '/cart/update',
+            type: 'POST',
+            data: {
+                cart_id: cartId,
+                cart_qty: newQty,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.total_price_per_product && response.total_cart_price) {
+                    $input.closest('tr').find('.cart__total').text(rupiah(response.total_price_per_product));
+                    $('#totalCartPrice').text(rupiah(response.total_cart_price));
+                }
+            },
+            error: function(xhr) {
+                alert('Error updating cart: ' + xhr.responseText);
+            }
+        });
+    }
+
     function rupiah(value) {
         return 'Rp ' + value.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     }
-
-    function fetchCartData() {
-        $.ajax({
-            url: '{{ route('cart.data') }}', // The route we defined in the backend
-            type: 'GET',
-            success: function(response) {
-                var cartItems = response.cart_items;
-                var totalCartPrice = response.total_cart_price;
-
-                // Empty the current cart table
-                $('.shop__cart__table tbody').empty();
-
-                // Loop through the cart items and add them to the table
-                cartItems.forEach(function(item) {
-                    var totalPricePerProduct = item.qty * (item.Product.discounted_price || item.Product.price);
-                    var productHtml = `
-                        <tr>
-                            <td class="cart__product__item">
-                                <img src="{{ asset('${item.Product.thumbnails_path}') }}" alt="" width="90">
-                                <div class="cart__product__item__title">
-                                    <h6>${item.Product.name}</h6>
-                                    <div class="rating">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="cart__price">
-                                ${item.Product.discounted_price ? 
-                                    '<span style="text-decoration: line-through;">' + rupiah(item.Product.price) + '</span>' +
-                                    '<span>' + rupiah(item.Product.discounted_price) + '</span>' :
-                                    '<span>' + rupiah(item.Product.price) + '</span>'
-                                }
-                            </td>
-                            <input type="hidden" name="cart_id[]" value="${item.id}">
-                            <td class="cart__quantity">
-                                <div class="pro-qty">
-                                    <span class="qtybtn">-</span>
-                                    <input type="number" value="${item.qty}" name="cart_qty[]">
-                                    <span class="qtybtn">+</span>
-                                </div>
-                            </td>
-                            <td class="cart__total">${rupiah(totalPricePerProduct)}</td>
-                            <td class="cart__close"><a href="{{ route('cart.delete', '${item.id}') }}"><span class="icon_close"></span></a></td>
-                        </tr>
-                    `;
-                    $('.shop__cart__table tbody').append(productHtml);
-                });
-
-                // Update the total cart price
-                $('#totalCartPrice').text(rupiah(totalCartPrice));
-            },
-            error: function(xhr) {
-                alert('Error fetching cart data: ' + xhr.responseText);
-            }
-        });
-    }
-
-    // Call the fetchCartData function on page load to populate the cart
-    fetchCartData();
+});
     </script>
 @endsection
