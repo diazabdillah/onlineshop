@@ -2277,14 +2277,14 @@ ol {
 	border-radius: 0;
 }
 
-.shop__cart__table tbody tr .cart__quantity .pro-qty input {
+/* .shop__cart__table tbody tr .cart__quantity .pro-qty input {
 	color: #444444;
 }
 
 .shop__cart__table tbody tr .cart__quantity .pro-qty .qtybtn {
 	font-size: 16px;
 	color: #444444;
-}
+} */
 
 .shop__cart__table tbody tr .cart__total {
 	font-size: 16px;

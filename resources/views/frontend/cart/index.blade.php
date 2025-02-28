@@ -1,29 +1,6 @@
 @extends('layouts.frontend.app')
 @section('content')
-<style>
-    .pro-qty {
-    display: inline-flex;
-    align-items: center;
-}
 
-.pro-qty .qtybtn {
-    cursor: pointer;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    background-color: #f8f8f8;
-}
-
-.pro-qty .qtybtn:hover {
-    background-color: #e8e8e8;
-}
-
-.pro-qty input {
-    width: 50px;
-    text-align: center;
-    border: 1px solid #ccc;
-    margin: 0 5px;
-}
-</style>
     <!-- Breadcrumb Begin -->
     <div class="breadcrumb-option">
         <div class="container">
@@ -82,14 +59,12 @@
                                         </td>
                                         <input type="hidden" name="cart_id[]" value="{{ $carts->id }}">
                                         <td class="cart__quantity">
-                                        <div class="pro-qty">
-        <button type="button" class="btn-minus">-</button>
-        <input type="number" value="{{ $carts->qty }}" name="cart_qty[]" min="1" max="{{ $carts->Product->stok }}" class="qty-input" style="width: 50px;">
-        <!-- Menghapus salah satu tombol + -->
-        <!-- <span class="inc qtybtn"></span> --> <!-- Menghapus tag HTML yang tersembunyi -->
-        <button type="button" class="btn-plus">+</button>
-    </div>
-</td>
+                                            <div class="pro-qty">
+                                                <button type="button" class="btn-minus">-</button>
+                                                <input type="number" value="{{ $carts->qty }}" name="cart_qty[]" min="1" max="{{ $carts->Product->stok }}" class="qty-input" style="width: 50px;">
+                                                <button type="button" class="btn-plus">+</button>
+                                            </div>
+                                        </td>
                                         <td class="cart__total">{{ rupiah($carts->total_price_per_product) }}</td>
                                         <td class="cart__close"><a href="{{ route('cart.delete',$carts->id) }}"><span class="icon_close"></span></a></td>
                                     </tr>
@@ -128,58 +103,60 @@
             </div>
         </div>
     </section>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     $(document).ready(function() {
         $('.pro-qty').on('click', '.btn-plus, .btn-minus', function(e) {
-        e.preventDefault();
-        var $button = $(this);
-        var $input = $button.siblings('.qty-input');
-        var oldValue = parseInt($input.val());
-        var maxStock = parseInt($input.attr('max'));
-        var newVal = oldValue;
+            e.preventDefault();
+            var $button = $(this);
+            var $input = $button.siblings('.qty-input');
+            var oldValue = parseInt($input.val());
+            var maxStock = parseInt($input.attr('max'));
+            var newVal = oldValue;
 
-        if ($button.hasClass('btn-plus')) {
-            if (oldValue < maxStock) {
-                newVal = oldValue + 1;
+            if ($button.hasClass('btn-plus')) {
+                if (oldValue < maxStock) {
+                    newVal = oldValue + 1;
+                }
+            } else if ($button.hasClass('btn-minus')) {
+                if (oldValue > 1) {
+                    newVal = oldValue - 1;
+                }
             }
-        } else if ($button.hasClass('btn-minus')) {
-            if (oldValue > 1) {
-                newVal = oldValue - 1;
-            }
+
+            $input.val(newVal);
+            updateCart($input);
+        });
+
+        function updateCart($input) {
+            var cartId = $input.closest('tr').find('input[name="cart_id[]"]').val();
+            var newQty = $input.val();
+
+            $.ajax({
+                url: '/cart/update',
+                type: 'POST',
+                data: {
+                    cart_id: cartId,
+                    cart_qty: newQty,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.total_price_per_product && response.total_cart_price) {
+                        $input.closest('tr').find('.cart__total').text(rupiah(response.total_price_per_product));
+                        $('#totalCartPrice').text(rupiah(response.total_cart_price));
+                    }
+                },
+                error: function(xhr) {
+                    alert('Error updating cart: ' + xhr.responseText);
+                }
+            });
         }
 
-        $input.val(newVal);
-        updateCart($input);
+        function rupiah(value) {
+            return 'Rp ' + value.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        }
     });
-
-    function updateCart($input) {
-        var cartId = $input.closest('tr').find('input[name="cart_id[]"]').val();
-        var newQty = $input.val();
-
-        $.ajax({
-            url: '/cart/update',
-            type: 'POST',
-            data: {
-                cart_id: cartId,
-                cart_qty: newQty,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                if (response.total_price_per_product && response.total_cart_price) {
-                    $input.closest('tr').find('.cart__total').text(rupiah(response.total_price_per_product));
-                    $('#totalCartPrice').text(rupiah(response.total_cart_price));
-                }
-            },
-            error: function(xhr) {
-                alert('Error updating cart: ' + xhr.responseText);
-            }
-        });
-    }
-
-    function rupiah(value) {
-        return 'Rp ' + value.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-    }
-});
     </script>
+
 @endsection

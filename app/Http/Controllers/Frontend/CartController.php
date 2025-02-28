@@ -63,36 +63,36 @@ class CartController extends Controller
             'cart_id' => 'required|integer',
             'cart_qty' => 'required|integer|min:1',
         ]);
-    
+        
         // Find the cart item by ID
         $cartItem = Cart::find($request->cart_id);
-    
+        
         if ($cartItem) {
             // Update quantity
             $cartItem->qty = $request->cart_qty;
             $cartItem->save();
-    
+        
             // Calculate total price per product based on quantity and discounted price (if any)
-            $totalPricePerProduct = $cartItem->qty * $cartItem->Product->price; // Default price logic
-            if ($cartItem->Product->discounted_price) {
-                $totalPricePerProduct = $cartItem->qty * $cartItem->Product->discounted_price;
-            }
-    
+            $productPrice = $cartItem->Product->discounted_price ?: $cartItem->Product->price; // Use discounted price if available, otherwise use regular price
+            $totalPricePerProduct = $cartItem->qty * $productPrice;
+        
             // Calculate the total price of the cart (across all items)
             $totalCartPrice = 0;
             $cartItems = Cart::all(); // Get all cart items
             foreach ($cartItems as $item) {
-                $totalCartPrice += $item->qty * ($item->Product->discounted_price ?: $item->Product->price);
+                $itemPrice = $item->Product->discounted_price ?: $item->Product->price; // Use discounted price if available
+                $totalCartPrice += $item->qty * $itemPrice; // Add up the total price for all items
             }
-    
+        
             // Return updated data to the AJAX response
             return response()->json([
                 'total_price_per_product' => $totalPricePerProduct,
                 'total_cart_price' => $totalCartPrice,
             ]);
         }
-    
+        
         return response()->json(['error' => 'Cart item not found'], 404);
+        
     }
     
     public function getCartData()
