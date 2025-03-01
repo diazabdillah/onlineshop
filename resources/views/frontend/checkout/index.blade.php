@@ -93,7 +93,7 @@
                                     <div id="voucher-list">
                                         @foreach ($data['vouchers'] as $voucher)
                                             <div class="voucher-item">
-                                               
+                
                                             </div>
                                         @endforeach
                                     </div>
@@ -130,6 +130,7 @@
                                     <input type="hidden" name="shipping_cost" id="shipping_cost">
                                     <input type="hidden" name="voucher_code" id="voucher_code" value="0">
                                     <input type="hidden" name="total_weight" value="{{ $data['carts']->sum('total_weight_per_product') }}">
+                                    <input type="hidden" name="total_pay" id="total_input" value="{{ $data['carts']->sum('total_price_per_product') }}">
                                 </ul>
                             </div>
                             <button type="submit" class="site-btn">Place order</button>
@@ -225,16 +226,15 @@
             countCost(ongkir);
         })
 
-        function countCost(ongkir)
-        {
-            var subtotal = `{{ $data['carts']->sum('total_price_per_product') }}`;
-            var discount = parseInt($('#voucher').text().replace(/[^0-9]/g, '')) || 0; // Ambil nilai diskon dari voucher
-            var total = parseInt(subtotal) + ongkir - discount; // Kurangi total dengan diskon
-            $('#text-cost').text(rupiah(ongkir));
-            $('#shipping_cost').val(ongkir);
-            $('#shipping_cost').val(ongkir);
-            $('#total').text(rupiah(total));
-        }
+        function countCost(ongkir) {
+    var subtotal = parseInt(`{{ $data['carts']->sum('total_price_per_product') }}`);
+    var discount = parseInt($('#voucher').text().replace(/[^0-9]/g, '')) || 0;
+    var total = subtotal + ongkir - discount;
+    $('#text-cost').text(rupiah(ongkir));
+    $('#shipping_cost').val(ongkir);
+    $('#total').text(rupiah(total));
+    $('#total_input').val(total); // Update hidden input
+}
 
         $(document).ready(function() {
     function fetchVouchers() {
@@ -245,7 +245,7 @@
                 let voucherList = "";
                 response.vouchers.forEach(voucher => {
                     let discountText = voucher.type === 'percentage' 
-                        ? `${voucher.discount}%` 
+                        ? `${voucher.discount}% S/& ${rupiah(voucher.max_discount)}` 
                         : rupiah(voucher.discount);
                     voucherList += `<div class="card mb-3 voucher-card">
                         <div class="card-body">
@@ -254,11 +254,12 @@
                                     <i class="fa fa-ticket fa-2x text-primary"></i>
                                 </div>
                                 <div class="col-7">
-                                    <h6 class="card-title mb-1">Diskon ${discountText} S/& ${rupiah(voucher.max_discount)}</h6>
+                                    <h6 class="card-title mb-1">Diskon ${discountText}</h6>
                                     <p class="card-text mb-0">
-                                        <span class="text-danger font-weight-bold">Kode: ${voucher.code}</span>
+                                          <span class="text-danger font-weight-bold">Berakhir pada tanggal: {{ \Carbon\Carbon::parse($voucher->valid_until)->format('d-m-Y') }}</span>
                                     </p>
                                     <small class="text-muted">Min. belanja ${rupiah(voucher.min_purchase)}</small>
+                                     <input type="hidden" name="code_voucher[]" value="${voucher.code}" readonly>
                                 </div>
                                 <div class="col-3 text-right">
                                     <input type="radio" name="selected_voucher" value="${voucher.code}" class="voucher-radio" data-code="${voucher.code}">
@@ -292,13 +293,14 @@
             success: function(response) {
                 if (response.success) {
                     let discount = response.data.discount;
-                    $('#voucher_code').val(discount);
-                    $('#voucher').text('-' + rupiah(discount));
-                    
-                    // Hitung total akhir setelah voucher diterapkan
-                    let totalAkhir = subtotal - discount; // Hitung total akhir
-                    $('#total').text(rupiah(totalAkhir));
-                   // Update total di UI
+        $('#voucher_code').val(discount);
+        $('#voucher').text('-' + rupiah(discount));
+        
+        let subtotal = parseInt(`{{ $data['carts']->sum('total_price_per_product') }}`);
+        let ongkir = parseInt($('#shipping_cost').val()) || 0;
+        let totalAkhir = subtotal + ongkir - discount;
+        $('#total').text(rupiah(totalAkhir));
+        $('#total_input').val(totalAkhir); // Update hidden input
                 } else {
                     resetVoucher();
                     alert(response.message);
@@ -312,11 +314,12 @@
         });
     }
     function resetVoucher() {
-    $('#voucher').text(rupiah(0));
-    $('#voucher_code').val('');
-    let subtotal = parseInt($('#subtotal').text().replace(/[^0-9]/g, '')) || 0;
-    $('#total').text(rupiah(subtotal)); // Update total di UI ke subtotal
-    $('#shipping_cost').val(0); // Reset shipping cost jika perlu
+        $('#voucher').text(rupiah(0));
+        $('#voucher_code').val('');
+        let subtotal = parseInt($('#subtotal').text().replace(/[^0-9]/g, '')) || 0;
+        let ongkir = parseInt($('#shipping_cost').val()) || 0;
+        let totalAkhir = subtotal;
+        $('#total').text(rupiah(totalAkhir));
 }
 });
 

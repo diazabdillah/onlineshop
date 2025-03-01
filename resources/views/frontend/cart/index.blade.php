@@ -59,12 +59,13 @@
                                         </td>
                                         <input type="hidden" name="cart_id[]" value="{{ $carts->id }}">
                                         <td class="cart__quantity">
-                                            <div class="pro-qty">
-                                                <button type="button" class="btn-minus">-</button>
-                                                <input type="number" value="{{ $carts->qty }}" name="cart_qty[]" min="1" max="{{ $carts->Product->stok }}" class="qty-input" style="width: 50px;">
-                                                <button type="button" class="btn-plus">+</button>
-                                            </div>
+                                            <div class="qtybtn d-flex align-items-center">
+                                    <button type="button" class="btn-minus">-</button>
+                                    <input type="number" value="{{ $carts->qty }}" name="cart_qty[]" min="1" max="{{ $carts->Product->stok }}" class="qty-input mx-2 text-center" style="width: 50px;">
+                                    <button type="button" class="btn-plus">+</button>
+                                </div>
                                         </td>
+                                        
                                         <td class="cart__total">{{ rupiah($carts->total_price_per_product) }}</td>
                                         <td class="cart__close"><a href="{{ route('cart.delete',$carts->id) }}"><span class="icon_close"></span></a></td>
                                     </tr>
@@ -107,7 +108,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     $(document).ready(function() {
-        $('.pro-qty').on('click', '.btn-plus, .btn-minus', function(e) {
+        $('.qtybtn').on('click', '.btn-plus, .btn-minus', function(e) {
             e.preventDefault();
             var $button = $(this);
             var $input = $button.siblings('.qty-input');
@@ -157,6 +158,41 @@
             return 'Rp ' + value.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         }
     });
+
+    const stock = {{ $carts->Product->stok }};
+                                const qtyInput = document.getElementById('cart_qty');
+                                const btnPlus = document.querySelector('.btn-plus');
+                                const btnMinus = document.querySelector('.btn-minus');
+
+                                function updateButtonState() {
+                                    const qtyValue = parseInt(qtyInput.value);
+                                    btnPlus.disabled = qtyValue >= stock; // Disable "+" button if qty >= stock
+                                    btnMinus.disabled = qtyValue <= 1; // Disable "-" button if qty <= 1
+                                }
+
+                                qtyInput.addEventListener('input', function() {
+                                    if (this.value > stock) {
+                                        this.value = stock; // Set to max stock if exceeded
+                                    }
+                                    updateButtonState();
+                                });
+
+                                btnPlus.addEventListener('click', function() {
+                                    if (parseInt(qtyInput.value) < stock) {
+                                        qtyInput.value = parseInt(qtyInput.value) + 1;
+                                        updateButtonState();
+                                    }
+                                });
+
+                                btnMinus.addEventListener('click', function() {
+                                    if (parseInt(qtyInput.value) > 1) {
+                                        qtyInput.value = parseInt(qtyInput.value) - 1;
+                                        updateButtonState();
+                                    }
+                                });
+
+                                // Initial button state update
+                                updateButtonState();
     </script>
 
 @endsection

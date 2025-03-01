@@ -59,7 +59,7 @@
                         <div class="product__details__button">
                             <div class="quantity">
                                 <span>Jumlah:</span>
-                                <div class="pro-qty d-flex align-items-center">
+                                <div class="qtybtn d-flex align-items-center">
                                     <button type="button" class="btn-minus">-</button>
                                     <input type="number" name="cart_qty" value="1" min="1" max="{{ $data['product']->stok }}" id="cart_qty" class="mx-2 text-center" style="width: 50px;">
                                     <button type="button" class="btn-plus">+</button>

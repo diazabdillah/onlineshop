@@ -27,12 +27,11 @@ class CheckoutService{
         $discount = 0;
 
      
-        $voucher_code = $request['voucher_code']; // Ambil kode voucher dari permintaan
-        $voucher = Voucher::where('discount', $voucher_code)->first(); // Temukan voucher berdasarkan kode
+        $voucher_code = $request['code_voucher']; // Ambil kode voucher dari permintaan
+        $voucher = Voucher::where('code', $voucher_code)->first(); // Temukan voucher berdasarkan kode
      
         if ($voucher) { // Periksa apakah voucher valid
             if ($voucher->used_count < $voucher->usage_limit) { // Periksa apakah voucher masih dapat digunakan
-                $discount = $subtotal - $request['voucher_code'];
                 $voucher->increment('used_count');
             } else {
                 // Tambahkan logika untuk menangani voucher yang sudah tidak dapat digunakan
@@ -42,10 +41,9 @@ class CheckoutService{
             $discount = $subtotal; // Jika voucher tidak valid, tidak ada diskon
         }
 
-        $total_pay = $discount + $request['shipping_cost']; 
         $dataOrder = [
             'invoice_number' => strtoupper(Str::random('6')),
-            'total_pay' => $total_pay,
+            'total_pay' => $request['total_pay'],
             'recipient_name' => $request['recipient_name'],
             'destination' =>  $request['city_id'] . ', ' . $request['province_id'] ,
             'address_detail' => $request['address_detail'],
