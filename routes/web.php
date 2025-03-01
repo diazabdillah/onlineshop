@@ -21,6 +21,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\Setting\WebconfigController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Role;
@@ -208,6 +209,9 @@ Route::middleware('auth','role:user')->group(function(){
     Route::post('posts/{post}/like', [LikePostController::class, 'store']);
     Route::post('/like/{name}', [LikeController::class, 'likeProduct'])->name('product.like');
     Route::get('/get-likes/{name}', [LikeController::class, 'getLikes']);
+    Route::get('/voucher', [VoucherController::class, 'index'])->name('voucher.index');
+    Route::post('/voucher/search', [VoucherController::class, 'search'])->name('voucher.search');
+    Route::post('/voucher/claim', [VoucherController::class, 'claim'])->name('voucher.claim');
     // Route::post('/apply-voucher', [CheckoutController::class, 'apply'])->name('apply.voucher');
     Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat', [ChatController::class, 'showChat'])->name('chat.show');
