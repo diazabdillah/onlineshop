@@ -232,6 +232,7 @@ Route::middleware('auth','role:user')->group(function(){
     Route::get('/cart/data', [CartController::class, 'getCartData'])->name('cart.data');
     Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
     Route::prefix('transaction')->name('transaction.')->group(function(){
+        Route::get('/invoice/download/{invoice_number}', [TransacationController::class, 'download'])->name('download');
         Route::get('/',[TransacationController::class,'index'])->name('index');
         Route::get('/{invoice_number}',[TransacationController::class,'show'])->name('show');
         Route::get('/{invoice_number}/received',[TransacationController::class,'received'])->name('received');

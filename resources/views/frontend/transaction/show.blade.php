@@ -272,9 +272,13 @@
                                         class="btn btn-primary text-white btn-icon icon-left"><i
                                             class="fa fa-credit-card"></i>
                                         Order Received</a>
+                                        <a href="{{ route('transaction.return', $data['order']->invoice_number) }}"
+                                            class="btn btn-danger text-white btn-icon icon-left"><i
+                                                class="fa fa-credit-card"></i>
+                                            Return Of Goods</a>
                                 @endif
                             </div>
-                            <button class="btn btn-warning btn-icon icon-left"><i class="fa fa-print"></i> Print</button>
+                            <a href="{{ route('transaction.download', $data['order']->invoice_number) }}" class="btn btn-warning btn-icon icon-left"><i class="fa fa-file-pdf"></i> Download PDF</a>
                         </div>
                     </div>
                 </div>

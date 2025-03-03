@@ -10,6 +10,7 @@ use App\Repositories\CrudRepositories;
 use App\Services\Feature\OrderService;
 use App\Services\Midtrans\CreateSnapTokenService;
 use Illuminate\Http\Request;
+use PDF;
 
 class TransacationController extends Controller
 {   
@@ -62,5 +63,21 @@ class TransacationController extends Controller
             }
         }
         return back()->with('success',__('message.order_canceled'));
+    }
+    public function download($invoice_number)
+    {
+        // Ambil data invoice berdasarkan invoice_number
+        $data['order'] = $this->order->Query()
+            ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->where('orders.invoice_number', $invoice_number)
+            ->select('orders.*', 'order_details.*', 'products.*') // Pilih kolom yang diinginkan
+            ->get();
+    
+        // Pastikan untuk mengirimkan 'order' dalam bentuk array jika lebih dari satu item
+        $pdf = PDF::loadView('frontend.transaction.invoice', compact('data'));
+    
+        // Kembalikan PDF sebagai unduhan
+        return $pdf->download('invoice_' . $invoice_number . '.pdf');
     }
 }

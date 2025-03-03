@@ -29,7 +29,7 @@
                      <ul>
                          <li class="{{ request()->is('/') ? 'active' : '' }}"><a href="{{ url('/') }}">Home</a></li>
                          <li class="{{ request()->is('product*') ? 'active' : '' }}"><a href="{{ route('product.index') }}">Shop</a></li>
-                         <li class="{{ request()->is('transaction*') ? 'active' : '' }}"><a href="{{ route('transaction.index') }}">Transaction</a></li>
+                         {{-- <li class="{{ request()->is('transaction*') ? 'active' : '' }}"><a href="{{ route('transaction.index') }}">Transaction</a></li> --}}
                          <li class="{{ request()->is('voucher*') ? 'active' : '' }}"><a href="{{ route('voucher.index') }}">Voucher</a></li>
                          <li class="{{ request()->is('chat*') ? 'active' : '' }}"><a href="{{ route('chat.show') }}">Chat Admin</a></li>
                          {{-- <li class="{{ request()->is('category*') ? 'active' : '' }}"><a href="{{ route('category.index') }}">Category</a></li> --}}
