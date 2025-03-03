@@ -23,24 +23,23 @@
         }
         .header {
             text-align: center;
-            padding-bottom: 30px;
-            margin-bottom: 30px;
+            /* padding-bottom: 30px;
+            margin-bottom: 30px; */
             border-bottom: 2px solid #ecf0f1;
         }
         .header img {
             max-width: 180px;
         }
-        .header h1 {
-            font-size: 40px;
+        .header h4 {
+            font-size: 10px;
             color: #2c3e50;
-            margin: 10px 0;
         }
-        .header p {
+        .header small {
             font-size: 10px;
             color: #7f8c8d;
         }
         .header .invoice-number {
-            font-size: 10px;
+            font-size: 14px;
             font-weight: bold;
             color: #e74c3c;
         }
@@ -72,14 +71,13 @@
         }
         .total {
             text-align: right;
-            margin-top: 20px;
         }
         .total table {
             width: 100%;
             text-align: right;
+            padding-right: 80px;
         }
         .total table td {
-            padding: 10px;
             font-size: 10px;
             font-weight: bold;
         }
